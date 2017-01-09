@@ -1,0 +1,6 @@
+This is the FAQ
+
+Does Parfait play nice with threads?
+
+Parfait supports one browser per thread.
+

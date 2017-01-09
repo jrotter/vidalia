@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Parfait::Control - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="ParfaitArtifact.html">Parfait::ParfaitArtifact</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li class="calls-super" ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-add_confirm">#add_confirm</a>
+    
+    <li ><a href="#method-i-add_generic_confirm">#add_generic_confirm</a>
+    
+    <li ><a href="#method-i-add_generic_navigate">#add_generic_navigate</a>
+    
+    <li ><a href="#method-i-add_generic_retrieve">#add_generic_retrieve</a>
+    
+    <li ><a href="#method-i-add_generic_update">#add_generic_update</a>
+    
+    <li ><a href="#method-i-add_generic_verify">#add_generic_verify</a>
+    
+    <li ><a href="#method-i-add_get">#add_get</a>
+    
+    <li ><a href="#method-i-add_goto">#add_goto</a>
+    
+    <li ><a href="#method-i-add_navigate">#add_navigate</a>
+    
+    <li ><a href="#method-i-add_retrieve">#add_retrieve</a>
+    
+    <li ><a href="#method-i-add_set">#add_set</a>
+    
+    <li ><a href="#method-i-add_to_page">#add_to_page</a>
+    
+    <li ><a href="#method-i-add_to_region">#add_to_region</a>
+    
+    <li ><a href="#method-i-add_update">#add_update</a>
+    
+    <li ><a href="#method-i-add_verify">#add_verify</a>
+    
+    <li ><a href="#method-i-confirm">#confirm</a>
+    
+    <li ><a href="#method-i-get">#get</a>
+    
+    <li ><a href="#method-i-goto">#goto</a>
+    
+    <li ><a href="#method-i-navigate">#navigate</a>
+    
+    <li ><a href="#method-i-retrieve">#retrieve</a>
+    
+    <li ><a href="#method-i-set">#set</a>
+    
+    <li ><a href="#method-i-update">#update</a>
+    
+    <li ><a href="#method-i-verify">#verify</a>
+    
+    <li ><a href="#method-i-verify_control_presence">#verify_control_presence</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Parfait::Control">
+  <h1 id="class-Parfait::Control" class="class">
+    class Parfait::Control
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-aliases" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">aliases</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-name" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">name</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Create a new control object</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>name</code>
+<dd>
+<p>the name used to identify this control</p>
+</dd><dt><code>logtext</code>
+<dd>
+<p>the text to be used when referring to this control in logs</p>
+</dd><dt><code>aliases</code>
+<dd>
+<p>specifies an array of aliases for the control</p>
+</dd><dt><code>parent</code>
+<dd>
+<p>specifies the parent object (Region or <a href="Page.html">Page</a>) of
+this control</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>newcontrol = Parfait::Control.new(
+  :name =&gt; &quot;User ID&quot;,
+  :logtext = &quot;user ID&quot;
+)</pre>
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="ParfaitArtifact.html#method-c-new">Parfait::ParfaitArtifact.new</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span> = {})
+<span class="ruby-identifier">o</span> = {
+    <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>,
+    <span class="ruby-value">:logtext</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>,
+    <span class="ruby-value">:aliases</span> =<span class="ruby-operator">&gt;</span> [],
+    <span class="ruby-value">:parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>
+  }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-ivar">@logtext</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:logtext</span>]
+  <span class="ruby-ivar">@aliases</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:aliases</span>]
+  <span class="ruby-ivar">@parent</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:parent</span>]
+
+  <span class="ruby-ivar">@set_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@get_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@update_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@retrieve_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@verify_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@confirm_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@goto_method</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@navigate_method</span> = <span class="ruby-keyword">nil</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@name</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Name must be a String when adding a control&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Name must be specified when adding a control&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@logtext</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@logtext</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Logtext must be a String when adding a control&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Logtext must be specified when adding a control&quot;</span> 
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@aliases</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@aliases</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Parfait::Control requires aliases to be an array&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@aliases</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">my_alias</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Parfait::Control requires each alias in the array to be a string&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">my_alias</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>
+      <span class="ruby-identifier">add_to_page</span>(<span class="ruby-ivar">@parent</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>
+        <span class="ruby-identifier">add_to_region</span>(<span class="ruby-ivar">@parent</span>)
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Parent specified for Control \&quot;#{@name}\&quot;, but parent object type unrecognized.&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">super</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-add_confirm" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_confirm</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_confirm-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 373</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_confirm</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@confirm_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_generic_confirm" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_generic_confirm</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p>Depends on get, retrieve</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_generic_confirm-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 485</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_generic_confirm</span>()
+  <span class="ruby-identifier">add_confirm</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">retval</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-identifier">found_value</span> = <span class="ruby-identifier">retrieve</span>()
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">found_value</span>
+      <span class="ruby-identifier">retval</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">retval</span>
+  }        
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_generic_navigate" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_generic_navigate</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p>Depends on goto</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_generic_navigate-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 508</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_generic_navigate</span>()
+  <span class="ruby-identifier">add_navigate</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">Parfait</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Navigating to #{@logtext}&quot;</span>)
+    <span class="ruby-identifier">goto</span>(<span class="ruby-identifier">opts</span>)
+  }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_generic_retrieve" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_generic_retrieve</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_generic_retrieve-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 443</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_generic_retrieve</span>()
+  <span class="ruby-identifier">add_retrieve</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">get</span>(<span class="ruby-identifier">opts</span>)
+  }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_generic_update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_generic_update</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p>Depends on get, retrieve, set</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_generic_update-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 418</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_generic_update</span>()
+  <span class="ruby-identifier">add_update</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">new_value</span> = <span class="ruby-identifier">value</span>
+    <span class="ruby-identifier">found_value</span> = <span class="ruby-identifier">retrieve</span>()
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_value</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">found_value</span>
+      <span class="ruby-identifier">capital_text</span> = <span class="ruby-ivar">@logtext</span>
+      <span class="ruby-identifier">capital_text</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">capital_text</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">capitalize</span>
+      <span class="ruby-constant">Parfait</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;#{capital_text} is already set to \&quot;#{new_value}\&quot;&quot;</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-constant">Parfait</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Entering #{@logtext}: \&quot;#{new_value}\&quot; (was \&quot;#{found_value}\&quot;)&quot;</span>)
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">new_value</span>,<span class="ruby-identifier">opts</span>)
+    <span class="ruby-keyword">end</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_generic_verify" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_generic_verify</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p>Depends on get, retrieve</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_generic_verify-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 461</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_generic_verify</span>()
+  <span class="ruby-identifier">add_verify</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">found_value</span> = <span class="ruby-identifier">retrieve</span>()
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">found_value</span>
+      <span class="ruby-constant">Parfait</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Verified #{@logtext} to be \&quot;#{value}\&quot;&quot;</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Expected #{@logtext} to be \&quot;#{value}\&quot;, but found \&quot;#{found_value}\&quot; instead&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">true</span>
+  }    
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_get" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_get</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_get-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 292</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_get</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@get_method</span> = <span class="ruby-identifier">block</span>
+  
+  <span class="ruby-identifier">add_generic_retrieve</span>() <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@retrieve_method</span>
+  <span class="ruby-identifier">add_generic_confirm</span>() <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@confirm_method</span>
+  <span class="ruby-identifier">add_generic_verify</span>() <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@verify_method</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@set_method</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">add_generic_update</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@update_method</span>
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_goto" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_goto</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_goto-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 387</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_goto</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@goto_method</span> = <span class="ruby-identifier">block</span>
+  <span class="ruby-identifier">add_generic_navigate</span>() <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@navigate_method</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_navigate" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_navigate</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_navigate-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 402</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_navigate</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@navigate_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_retrieve" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_retrieve</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_retrieve-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 345</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_retrieve</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@retrieve_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_set" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_set</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_set-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 313</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_set</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@set_method</span> = <span class="ruby-identifier">block</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@get_method</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">add_generic_update</span>() <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@update_method</span>
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_to_page" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_to_page</span><span
+            class="method-args">(page)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add this <a href="Control.html">Control</a> to a <a
+href="Page.html">Page</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>page</code>
+<dd>
+<p>specifies a <a href="Page.html">Parfait::Page</a> object to add this <a
+href="Control.html">Control</a> to</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>loginpage = Parfait::Page.new(
+  :name =&gt; &quot;Login Page&quot;
+)
+newcontrol = Parfait::Control.new(
+  :name =&gt; &quot;User ID&quot;,
+  :logtext = &quot;user ID&quot;
+)
+newcontrol.add_to_page(loginpage)</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_to_page-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 100</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_page</span>(<span class="ruby-identifier">page</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">page</span>
+    <span class="ruby-keyword">case</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">page</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>)
+      <span class="ruby-identifier">page</span>.<span class="ruby-identifier">add_control</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value must be a Page object when adding this Control to a Page&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value cannot be nil when adding this Control to a Page&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_to_region" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_to_region</span><span
+            class="method-args">(region)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add this <a href="Control.html">Control</a> to a <a
+href="Region.html">Region</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>region</code>
+<dd>
+<p>specifies a <a href="Region.html">Parfait::Region</a> object to add this <a
+href="Control.html">Control</a> to</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>user = Parfait::Region.new(
+  :name =&gt; &quot;User&quot;
+)
+newcontrol = Parfait::Control.new(
+  :name =&gt; &quot;Edit User&quot;,
+  :logtext = &quot;edit user link&quot;
+)
+user.add_to_region(newcontrol)</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_to_region-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_region</span>(<span class="ruby-identifier">region</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>
+    <span class="ruby-keyword">case</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">region</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>)
+      <span class="ruby-identifier">region</span>.<span class="ruby-identifier">add_control</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value must be a Region object when adding this Control to a Region&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value cannot be nil when adding this Control to a Region&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_update</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_update-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 331</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_update</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@update_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_verify" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_verify</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_verify-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 359</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_verify</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@verify_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-confirm" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">confirm</span><span
+            class="method-args">(value,opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="confirm-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 232</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">confirm</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;confirm&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@confirm_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="get-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 172</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@get_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-goto" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">goto</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="goto-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 262</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">goto</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;goto&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@goto_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-navigate" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">navigate</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="navigate-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 277</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">navigate</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;navigate&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@navigate_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-retrieve" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">retrieve</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="retrieve-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 202</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">retrieve</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;retrieve&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@retrieve_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set</span><span
+            class="method-args">(value,opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set the value for this control</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>value</code>
+<dd>
+<p>specifies the value that this control will be set to</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="set-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 187</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;set&quot;</span>)
+  <span class="ruby-ivar">@set_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">(value,opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 217</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;update&quot;</span>)
+  <span class="ruby-ivar">@update_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-verify" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">verify</span><span
+            class="method-args">(value,opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="verify-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 247</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">verify</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-string">&quot;verify&quot;</span>)
+  <span class="ruby-ivar">@verify_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>,<span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-verify_control_presence" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">verify_control_presence</span><span
+            class="method-args">(directive_name)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Method description</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>option</code>
+<dd>
+<p>specifies something</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre>$$$ Need an example $$$</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="verify_control_presence-source">
+            <pre><span class="ruby-comment"># File lib/parfait/control.rb, line 158</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">verify_control_presence</span>(<span class="ruby-identifier">directive_name</span>)
+  <span class="ruby-identifier">verify_presence</span> <span class="ruby-node">&quot;Cannot call \&quot;#{directive_name}\&quot; directive because presence check for control \&quot;#{@name}\&quot; failed&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.2.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

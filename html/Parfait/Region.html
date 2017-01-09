@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Parfait::Region - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="ParfaitArtifact.html">Parfait::ParfaitArtifact</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li class="calls-super" ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-add_control">#add_control</a>
+    
+    <li ><a href="#method-i-add_filter">#add_filter</a>
+    
+    <li ><a href="#method-i-add_region">#add_region</a>
+    
+    <li ><a href="#method-i-add_to_page">#add_to_page</a>
+    
+    <li ><a href="#method-i-add_to_region">#add_to_region</a>
+    
+    <li ><a href="#method-i-control">#control</a>
+    
+    <li ><a href="#method-i-filter">#filter</a>
+    
+    <li ><a href="#method-i-region">#region</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Parfait::Region">
+  <h1 id="class-Parfait::Region" class="class">
+    class Parfait::Region
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-aliases" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">aliases</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-name" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">name</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Create a new region object</p>
+
+<p>Regions use filters to reduce the scope of HTML that their child elements
+(Controls or other Regions) need to consider.  This allows for easier
+management of repeated controls on a page.</p>
+
+<p>For instance, assume the Region&#39;s parent is a <a
+href="Page.html">Page</a> and that page contains a list of users, each with
+an “Edit” link next to them.</p>
+
+<p>Defining a <a href="Region.html">Region</a> would allow any child controls
+to look specifically at a single user, by userid, perhaps.  Then a child 
+control can be created to select “Edit” for the chosen userid.</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>name</code>
+<dd>
+<p>the name used to identify this region</p>
+</dd><dt><code>aliases</code>
+<dd>
+<p>specifies an array of aliases for the region</p>
+</dd><dt><code>parent</code>
+<dd>
+<p>specifies the parent object (Region or <a href="Page.html">Page</a>) of
+this control</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-comment"># Define the application</span>
+<span class="ruby-identifier">mybrowser</span> = <span class="ruby-constant">Watir</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">new</span>()
+<span class="ruby-identifier">myapp</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Application</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Blog&quot;</span>,
+  :<span class="ruby-identifier">browser</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">mybrowser</span>
+)
+
+<span class="ruby-comment"># Define the page</span>
+<span class="ruby-identifier">mypage</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User List&quot;</span>
+)
+<span class="ruby-identifier">myapp</span>.<span class="ruby-identifier">add_page</span>(<span class="ruby-identifier">mypage</span>)
+
+<span class="ruby-comment"># Define the region</span>
+<span class="ruby-identifier">myregion</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User&quot;</span>,
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">mypage</span>
+)
+</pre>
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="ParfaitArtifact.html#method-c-new">Parfait::ParfaitArtifact.new</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">o</span> = {
+    <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>,
+    <span class="ruby-value">:aliases</span> =<span class="ruby-operator">&gt;</span> [],
+    <span class="ruby-value">:parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>
+  }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-ivar">@aliases</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:aliases</span>]
+  <span class="ruby-ivar">@parent</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:parent</span>]
+
+  <span class="ruby-ivar">@controls</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@regions</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@pages</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@name</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Name must be a String when adding a region&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Name must be specified when adding a region&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@aliases</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@aliases</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Parfait::Region requires aliases to be an array&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@aliases</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">my_alias</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Parfait::Region requires each alias in the array to be a string&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">my_alias</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>
+      <span class="ruby-identifier">add_to_page</span>(<span class="ruby-ivar">@parent</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@parent</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>
+        <span class="ruby-identifier">add_to_region</span>(<span class="ruby-ivar">@parent</span>)
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Parent specified for Region \&quot;#{@name}\&quot;, but parent object type unrecognized.&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">super</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-add_control" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_control</span><span
+            class="method-args">(control)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add a <a href="Control.html">Control</a> to the current <a
+href="Region.html">Region</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>control</code>
+<dd>
+<p>specifies the <a href="Control.html">Control</a> object to be added</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">region</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Prescription List&quot;</span> 
+)
+<span class="ruby-identifier">control</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Edit Prescription&quot;</span>
+)
+<span class="ruby-identifier">region</span>.<span class="ruby-identifier">add_control</span>(<span class="ruby-identifier">control</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_control-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 301</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_control</span>(<span class="ruby-identifier">control</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">control</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">control</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>)
+      <span class="ruby-ivar">@controls</span>[<span class="ruby-identifier">control</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">control</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">control</span>.<span class="ruby-identifier">aliases</span>
+        <span class="ruby-identifier">control</span>.<span class="ruby-identifier">aliases</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">my_alias</span><span class="ruby-operator">|</span>
+          <span class="ruby-ivar">@controls</span>[<span class="ruby-identifier">my_alias</span>] = <span class="ruby-identifier">control</span>
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Control must be a Parfait::Control when being adding to a Region&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Control must be specified when adding a Control to an Region&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_filter" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_filter</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set the filter for this <a href="Region.html">Region</a> to use.</p>
+
+<p>When a child of this <a href="Region.html">Region</a> is invoked, the <a
+href="Region.html">Region</a> will use this  filter to zoom in on a subset
+of the parent element&#39;s HTML in order to reduce the scope of HTML that
+the child needs to consider.</p>
+
+<p>The defined filter should alter the +<a
+href=":parfait_region">Thread.current</a>+ value.</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>block</code>
+<dd>
+<p>specifies the block of code that will reduce the scope of HTML by updating
++<a href=":parfait_region">Thread.current</a>+.  The block should take a
+single parameter indicating data unique to the filtered region.  For
+example, in a list of users, the block parameter could be a user ID.</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-comment"># Define the application</span>
+<span class="ruby-identifier">mybrowser</span> = <span class="ruby-constant">Watir</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">new</span>()
+<span class="ruby-identifier">myapp</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Application</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Blog&quot;</span>,
+  :<span class="ruby-identifier">browser</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">mybrowser</span>
+)
+
+<span class="ruby-comment"># Define the page</span>
+<span class="ruby-identifier">mypage</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User List&quot;</span>
+)
+<span class="ruby-identifier">mybrowser</span>.<span class="ruby-identifier">add_page</span>(<span class="ruby-identifier">mypage</span>)
+
+<span class="ruby-comment"># Define the region</span>
+<span class="ruby-identifier">myregion</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User&quot;</span>
+)
+
+<span class="ruby-comment"># Set the filter for this region to look specifically at user ID</span>
+<span class="ruby-identifier">myregion</span>.<span class="ruby-identifier">add_filter</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">userid</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>[:<span class="ruby-identifier">parfait_region</span>] =  <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>[:<span class="ruby-identifier">parfait_region</span>].<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;userlist&quot;</span>).<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">/#{userid}/</span>)
+}
+<span class="ruby-identifier">mypage</span>.<span class="ruby-identifier">add_region</span>(<span class="ruby-identifier">myregion</span>)
+
+<span class="ruby-comment"># Use the Region to focus on the entry for User &quot;jrotter&quot;</span>
+<span class="ruby-identifier">myapp</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;User List&quot;</span>).<span class="ruby-identifier">region</span>(<span class="ruby-string">&quot;User&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;jrotter&quot;</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_filter-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 197</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_filter</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@filter_method</span> = <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_region" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_region</span><span
+            class="method-args">(region)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add a <a href="Region.html">Region</a> to the current <a
+href="Region.html">Region</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>region</code>
+<dd>
+<p>specifies the <a href="Region.html">Region</a> object to be added</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">region1</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User List&quot;</span>
+)
+<span class="ruby-identifier">page</span>.<span class="ruby-identifier">add_region</span>(<span class="ruby-identifier">region1</span>)
+<span class="ruby-identifier">region2</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User Roles&quot;</span>
+)
+<span class="ruby-identifier">region1</span>.<span class="ruby-identifier">add_region</span>(<span class="ruby-identifier">region2</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_region-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 234</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_region</span>(<span class="ruby-identifier">region</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>)
+      <span class="ruby-ivar">@regions</span>[<span class="ruby-identifier">region</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">region</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>.<span class="ruby-identifier">aliases</span>
+        <span class="ruby-identifier">region</span>.<span class="ruby-identifier">aliases</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">my_alias</span><span class="ruby-operator">|</span>
+          <span class="ruby-ivar">@regions</span>[<span class="ruby-identifier">my_alias</span>] = <span class="ruby-identifier">region</span>
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Region must be a Parfait::Region when being added to another Region&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Region must be specified when adding a Region to another Region&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_to_page" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_to_page</span><span
+            class="method-args">(page)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add this <a href="Region.html">Region</a> to a <a href="Page.html">Page</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>page</code>
+<dd>
+<p>specifies a <a href="Page.html">Parfait::Page</a> object to add this <a
+href="Region.html">Region</a> to</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">mypage</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Edit User&quot;</span>,
+  :<span class="ruby-identifier">aliases</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;User Edit&quot;</span>]
+)
+<span class="ruby-identifier">region</span>.<span class="ruby-identifier">add_to_page</span>(<span class="ruby-identifier">mypage</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_to_page-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_page</span>(<span class="ruby-identifier">page</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">page</span>
+    <span class="ruby-keyword">case</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">page</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>)
+      <span class="ruby-identifier">page</span>.<span class="ruby-identifier">add_region</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value must be a Page object when adding this Region to a Page&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value cannot be nil when adding this Region to a Page&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_to_region" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_to_region</span><span
+            class="method-args">(region)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add this <a href="Region.html">Region</a> to a <a
+href="Region.html">Region</a></p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>region</code>
+<dd>
+<p>specifies a <a href="Region.html">Parfait::Region</a> object to add this <a
+href="Region.html">Region</a> to</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">existing_region</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User&quot;</span>
+)
+<span class="ruby-identifier">new_region</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Roles&quot;</span>
+)
+<span class="ruby-identifier">new_region</span>.<span class="ruby-identifier">add_to_region</span>(<span class="ruby-identifier">existing_region</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="add_to_region-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_region</span>(<span class="ruby-identifier">region</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>
+    <span class="ruby-keyword">case</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">region</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>)
+      <span class="ruby-identifier">region</span>.<span class="ruby-identifier">add_region</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value must be a Region object when adding this Region to another Region&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Input value cannot be nil when adding this Region to another Region&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-control" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">control</span><span
+            class="method-args">(requested_name)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Retrieve a <a href="Control.html">Control</a> object by name or alias.</p>
+
+<p>Under the covers, if there is an existence directive defined for this
+control, it will be run on the current browser to confirm that it is indeed
+present.</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>name</code>
+<dd>
+<p>specifies the name or alias of the control</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">myregion</span>.<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;User ID&quot;</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="control-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 335</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">control</span>(<span class="ruby-identifier">requested_name</span>)
+  <span class="ruby-identifier">control</span> = <span class="ruby-ivar">@controls</span>[<span class="ruby-identifier">requested_name</span>] 
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">control</span>
+    <span class="ruby-comment"># Confirm that we are in the expected region</span>
+    <span class="ruby-identifier">verify_presence</span> <span class="ruby-node">&quot;Cannot navigate to control \&quot;#{requested_name}\&quot; because region presence check failed&quot;</span>
+
+
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">control</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid control name requested: \&quot;#{requested_name}\&quot;&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-filter" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">filter</span><span
+            class="method-args">(param)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Call the filter for this region</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>param</code>
+<dd>
+<p>specifies the parameter to use when applying the filter for this region</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">region</span>.<span class="ruby-identifier">filter</span>(<span class="ruby-string">&quot;patches.ohoulihan&quot;</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="filter-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 212</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">filter</span>(<span class="ruby-identifier">param</span>)
+   <span class="ruby-ivar">@filter_method</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">param</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-region" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">region</span><span
+            class="method-args">(opts = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Retrieve a <a href="Region.html">Region</a> object by name or alias.</p>
+
+<p>Under the covers, if there is an existence directive defined for this
+region, it will be run on the current browser to confirm that it is indeed
+present.</p>
+
+<p><strong>Options</strong></p>
+<dl class="rdoc-list note-list"><dt><code>name</code>
+<dd>
+<p>specifies the name or alias of the region</p>
+</dd></dl>
+
+<p><strong>Example</strong></p>
+
+<pre class="ruby"><span class="ruby-identifier">myregion</span>.<span class="ruby-identifier">region</span>(<span class="ruby-string">&quot;User List&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">username</span>)
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="region-source">
+            <pre><span class="ruby-comment"># File lib/parfait/region.rb, line 268</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">region</span>(<span class="ruby-identifier">opts</span> = {})
+  <span class="ruby-identifier">region</span> = <span class="ruby-ivar">@regions</span>[<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">first</span>[<span class="ruby-value">0</span>]] 
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">region</span>
+
+    <span class="ruby-comment"># Confirm that we are in the expected region</span>
+    <span class="ruby-identifier">verify_presence</span> <span class="ruby-node">&quot;Cannot navigate to region \&quot;#{opts.first[0]}\&quot; because region presence check failed&quot;</span>
+
+    <span class="ruby-comment"># Apply the filter method</span>
+    <span class="ruby-identifier">region</span>.<span class="ruby-identifier">filter</span>(<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">first</span>[<span class="ruby-value">1</span>])
+
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">region</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid region name requested: \&quot;#{opts.first[0]}\&quot;&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.2.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

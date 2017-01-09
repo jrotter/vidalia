@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./FAQ_rdoc.html">FAQ</a>
+  
+    <li><a href="./README_rdoc.html">README</a>
+  
+  </ul>
+</div>
+
+    <div id="classindex-section" class="nav-section">
+  <h3>Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Parfait.html">Parfait</a>
+  
+    <li><a href="./Parfait/Application.html">Parfait::Application</a>
+  
+    <li><a href="./Parfait/Control.html">Parfait::Control</a>
+  
+    <li><a href="./Parfait/Page.html">Parfait::Page</a>
+  
+    <li><a href="./Parfait/ParfaitArtifact.html">Parfait::ParfaitArtifact</a>
+  
+    <li><a href="./Parfait/Region.html">Parfait::Region</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main">
+
+
+<h1 id="label-Parfait"><a href="Parfait.html">Parfait</a><span><a href="#label-Parfait">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<h2 id="label-What+is+Parfait-3F">What is <a href="Parfait.html">Parfait</a>?<span><a href="#label-What+is+Parfait-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p><a href="Parfait.html">Parfait</a> uses layers to simplify the creation and
+maintenance of your automated browser test suite.</p>
+
+<p>A typical automated test suite can be broken down into layers:</p>
+<ul><li>
+<p>A <strong>workflow layer</strong> on top, which dictates the user&#39;s
+path through the application.  Think in terms of verbs and user stories:
+“As a user, when I login, I expect to be taken to my home page.”  The
+workflow layer cares about user actions and results, not about the
+mechanics of entering data into the browser.</p>
+</li><li>
+<p>A <strong>control layer</strong> beneath, which defines the specific
+interactions between the user and the web page.  This control layer would
+be implemented in your favorite browser automation tool, e.g. Selenium,
+Watir, etc.  The control layer cares only about getting data into and out
+of specific fields on specific pages.</p>
+</li></ul>
+
+<p><a href="Parfait.html">Parfait</a> provides a layer between the two,
+offering a set of basic test directives which are easy to call by the
+workflow layer and providing a simple infrastructure for creation and
+maintenance of the control layer beneath.</p>
+
+<h2 id="label-How+does+Parfait+work-3F">How does <a href="Parfait.html">Parfait</a> work?<span><a href="#label-How+does+Parfait+work-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>At the control layer, <a href="Parfait.html">Parfait</a> allows you to
+define four basic objects: Applications, Pages, Regions, and Controls.</p>
+
+<h3 id="label-Applications">Applications<span><a href="#label-Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>An Application is the top layer of the <a href="Parfait.html">Parfait</a>
+object hierarchy.  It is simply a collection of Pages.</p>
+
+<h3 id="label-Pages">Pages<span><a href="#label-Pages">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>A Page is a collection of Controls and Regions that are presented on the
+same screen.  This could be an actual page, or a panel on the screen that
+is used throughout the application.</p>
+
+<h3 id="label-Regions">Regions<span><a href="#label-Regions">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>A Region is a specific section on the screen.  <a
+href="Parfait.html">Parfait</a> does not require Regions to be defined, but
+they can be helpful when there are multiple similar controls on the screen,
+like in a list.</p>
+
+<p>A Region can contain Controls or other Regions.</p>
+
+<h3 id="label-Controls">Controls<span><a href="#label-Controls">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>A Control is a single interaction point on a web page.  There can be data
+controls like links, text fields, and pulldown menus, as well as non-data
+controls like links and buttons.  All controls have a set of directives
+associated with them to enable easier implementation of your test
+automation.</p>
+
+<h4 id="label-Data+Controls">Data Controls<span><a href="#label-Data+Controls">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>Each data control is built around the two primary directives
+<code>get</code> and <code>set</code>:</p>
+<ul><li>
+<p><code>get</code> - reads and returns the current value from the Control</p>
+</li><li>
+<p><code>set</code> - uses the Control to set a new value.</p>
+</li></ul>
+
+<p>Once these primary directives are defined, <a
+href="Parfait.html">Parfait</a> puts them together to build the following
+directives for free:</p>
+<ul><li>
+<p><code>retrieve</code> - Reads and returns the current value from the
+Control.  Does not log anything.  (This is the user-callable version of
+<code>get</code>.)</p>
+</li><li>
+<p><code>update</code> - Uses the Control to set a new value.  Logs the value
+of the Control both before and after the change for auditing purposes.</p>
+</li><li>
+<p><code>confirm</code> - Tests the value of the Control, returning
+<code>true</code> if the input matches the value of the Control and
+<code>false</code> otherwise.  Does not log anything.</p>
+</li><li>
+<p><code>verify</code>  = Test the value of the Control, raising an exception
+if the input does not match the value of the Control.  Returns
+<code>true</code> otherwise.  Logs successes for auditing purposes.</p>
+</li></ul>
+
+<h4 id="label-Non-Data+Controls">Non-Data Controls<span><a href="#label-Non-Data+Controls">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>Each non-data control is built upon a single <code>goto</code> directive:</p>
+<ul><li>
+<p><code>goto</code> - selects or clicks the control to navigate elsewhere in
+the application</p>
+</li></ul>
+
+<p>From this directive, a secondary <code>navigate</code> directive is built:</p>
+<ul><li>
+<p><code>navigate</code> - Uses the Control to navigate.  Logs its action. 
+(This is the user-callable version of <code>goto</code>.)</p>
+</li></ul>
+
+<h4 id="label-Additional+Directives">Additional Directives<span><a href="#label-Additional+Directives">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>Additionally, Application, Page, Region, and Control objects can each have
+a <code>check</code> directive defined:</p>
+<ul><li>
+<p><code>check</code> - returns true if the <a href="Parfait.html">Parfait</a>
+artifact is present on the current screen and false otherwise</p>
+</li></ul>
+
+<p>In the spirit of <a href="Parfait.html">Parfait</a>, this builds a
+secondary <code>present</code> directive:</p>
+<ul><li>
+<p><code>present</code> - returns true if the <a
+href="Parfait.html">Parfait</a> artifact is present on the current screen
+and false otherwise.</p>
+</li></ul>
+
+<p>While manually invokable, the <code>present</code> directive for a control
+will also be called under the covers each time that control is used to
+confirm that the artifact you are acting on is still there.</p>
+
+<h2 id="label-How+do+I+get+started+with+Parfait-3F">How do I get started with <a href="Parfait.html">Parfait</a>?<span><a href="#label-How+do+I+get+started+with+Parfait-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The code examples used below are all taken from the <a
+href="Parfait.html">Parfait</a> repository in the
+<code>examples/example1</code> directory.  In this directory, we will be
+automating control of the <code>index.html</code> page.</p>
+
+<p>Remember, <a href="Parfait.html">Parfait</a> breaks the code into two
+layers, so we&#39;ll define those layers in different files.  The workflow
+layer will be defined in <code>demo.rb</code>, but let&#39;s start by using
+<a href="Parfait.html">Parfait</a> to define the control layer in
+<code>page.rb</code>.</p>
+
+<h3 id="label-Define+a+Page">Define a Page<span><a href="#label-Define+a+Page">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>Our first step is to define a page.  We&#39;ll name it “Sample Page” to
+match the name of the page we&#39;re controlling:</p>
+
+<pre class="ruby"><span class="ruby-identifier">sample_page</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Sample Page&quot;</span>)
+</pre>
+
+<p>Next we should add the page to our application:</p>
+
+<pre class="ruby"><span class="ruby-identifier">sample_page</span>.<span class="ruby-identifier">add_to_application</span>(<span class="ruby-string">&quot;Sample App&quot;</span>)
+</pre>
+
+<p>Since our application has not yet been defined, this call will actually
+create the <a href="Parfait/Application.html">Parfait::Application</a>
+object under the covers.  This may seem a bit backward, but it allows a
+whole bunch of <a href="Parfait.html">Parfait</a> Page definitions to be
+pre-loaded in our test suite without having to worry about passing around
+an Application object.  We&#39;ll be able to get an instance of this object
+later on in the workflow layer.</p>
+
+<p>We can also add a check to confirm that we are on our new page:</p>
+
+<pre class="ruby"><span class="ruby-identifier">sample_page</span>.<span class="ruby-identifier">add_check</span> {
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">h1</span>(:<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Parfait Example Page&quot;</span>).<span class="ruby-identifier">present?</span>
+}
+</pre>
+
+<p>Every time we reference the page object, this condition will be tested to
+ensure that we are where we think we are before continuing.</p>
+
+<h3 id="label-Add+some+Controls">Add some Controls<span><a href="#label-Add+some+Controls">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>Our sample web page starts with a set of radio buttons.  A data control
+like this can be defined in three steps.</p>
+
+<p>First, we create a Control object on our Page:</p>
+
+<pre>party = Parfait::Control.new(
+  :name =&gt; &quot;Party&quot;, 
+  :logtext =&gt; &quot;political party&quot;
+  :parent =&gt; sample_page)</pre>
+
+<p>Then we define <code>get</code> and <code>set</code> directives for the
+control.  For the <code>get</code>, no parameters are necessary and the
+code passed in should return the value of the control:</p>
+
+<pre class="ruby"><span class="ruby-identifier">party</span>.<span class="ruby-identifier">add_get</span> {
+  <span class="ruby-identifier">retval</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">retval</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;radio-example&quot;</span>).<span class="ruby-identifier">radio</span>(:<span class="ruby-identifier">value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Federalist&quot;</span>).<span class="ruby-identifier">set?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Federalist&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">retval</span>
+  <span class="ruby-identifier">retval</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;radio-example&quot;</span>).<span class="ruby-identifier">radio</span>(:<span class="ruby-identifier">value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Republicrat&quot;</span>).<span class="ruby-identifier">set?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Republicrat&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">retval</span>
+  <span class="ruby-identifier">retval</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;radio-example&quot;</span>).<span class="ruby-identifier">radio</span>(:<span class="ruby-identifier">value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Know-Nothing&quot;</span>).<span class="ruby-identifier">set?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Know-Nothing&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">retval</span>
+  <span class="ruby-identifier">retval</span>
+}
+</pre>
+
+<p>For the <code>set</code> directive, a single value is taken as input,
+followed by an optional hash.  In most cases, we can ignore the hash.</p>
+
+<pre class="ruby"><span class="ruby-identifier">party</span>.<span class="ruby-identifier">add_set</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">input</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;radio-example&quot;</span>).<span class="ruby-identifier">radio</span>(:<span class="ruby-identifier">value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">input</span>).<span class="ruby-identifier">set</span>
+}
+</pre>
+
+<p>Now that the <code>get</code> and <code>set</code> directives are defined
+for this control, <a href="Parfait.html">Parfait</a> will use them to build
+<code>update</code>, <code>retrieve</code>, <code>confirm</code>, and
+<code>verify</code> directives for you.  We&#39;ll use those in the
+workflow layer in a bit.</p>
+
+<p>We also have a “Set My Party” button to add as a non-data Control. 
+Let&#39;s add that to our Page definition as well.  The difference with the
+non-data Control is that the only directive we set here is the
+<code>goto</code> method:</p>
+
+<pre>set_my_party = Parfait::Control.new(
+  :name =&gt; &quot;Set My Party&quot;, 
+  :logtext =&gt; &quot;Set My Party button&quot;
+  :parent =&gt; sample_page)
+
+set_my_party.add_goto {
+  Parfait::browser.button(:value =&gt; &quot;Set My Party&quot;).click
+}</pre>
+
+<p>With a <code>goto</code> directive defined, <a
+href="Parfait.html">Parfait</a> will build the <code>navigate</code>
+directive from that code, allowing navigation with better logging.  Again,
+we&#39;ll see that when we code the workflow layer.</p>
+
+<h3 id="label-Working+with+Regions">Working with Regions<span><a href="#label-Working+with+Regions">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>When automating web pages, we often have to deal with repeated elements
+that are similar, or even identical.  <a href="Parfait.html">Parfait</a>
+allows the definition of Regions to focus on a specific entry in that list
+and then locate the common control from there.  Consider the list of
+presidents presented in <code>index.html</code>/.</p>
+
+<p>We will define a Region to isolate information for a single president. 
+This wil allow us to easily get at the fields for that president with
+subsequent control definitions for that region.  First we can define the
+Region and add it to the Page.</p>
+
+<pre class="ruby"><span class="ruby-identifier">president_region</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Region</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;President&quot;</span>, 
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sample_page</span>)
+</pre>
+
+<p>The key piece in defining the region is the filter, which reduces the scope
+Watir is looking at by starting with <code>Parfait::browser</code>,
+applying the filter and then calling <code>Parfait::filter_browser</code>
+to store the reduced scope.</p>
+
+<p>The add_filter method will take a single parameter - if more are necessary,
+then a subfilter should be used instead.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Define a filter so that this region will allow focus on a single entry</span>
+<span class="ruby-identifier">president_region</span>.<span class="ruby-identifier">add_filter</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">president_name</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">table_rows</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">div</span>(:<span class="ruby-identifier">id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;presidents&quot;</span>).<span class="ruby-identifier">trs</span>
+  <span class="ruby-identifier">table_rows</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tr</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">tr</span>.<span class="ruby-identifier">text</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/#{president_name}/</span>
+      <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">filter_browser</span> <span class="ruby-identifier">tr</span>
+      <span class="ruby-keyword">break</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+}
+</pre>
+
+<p>With this filter defined, we can access the controls under each president
+much more easily.  Let&#39;s start with the nickname control:</p>
+
+<pre class="ruby"><span class="ruby-identifier">nickname</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Nickname&quot;</span>, 
+  :<span class="ruby-identifier">logtext</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;president nickname&quot;</span>, 
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">president_region</span>)
+
+<span class="ruby-identifier">nickname</span>.<span class="ruby-identifier">add_get</span> {
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">text_field</span>.<span class="ruby-identifier">value</span>
+}
+
+<span class="ruby-identifier">nickname</span>.<span class="ruby-identifier">add_set</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">input</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">text_field</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">input</span>
+}
+</pre>
+
+<p>Note that the <code>get</code> and the <code>set</code> rely on inheriting
+the filtered browser from the “President” region.  That means the Watir
+code can just assume that it&#39;s looking at a single table row.  Since
+this is the only text field within that row, no further specification is
+necessary than <code>Parfait::browser.text_field</code> to access that
+control.</p>
+
+<p>Similarly, the “Update Nickname” control can be defined:</p>
+
+<pre class="ruby"><span class="ruby-identifier">update_nickname</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Set My Party&quot;</span>, 
+  :<span class="ruby-identifier">logtext</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Set My Party button&quot;</span>, 
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">president_region</span>)
+
+<span class="ruby-identifier">update_nickname</span>.<span class="ruby-identifier">add_goto</span> {
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">button</span>(:<span class="ruby-identifier">value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Update&quot;</span>).<span class="ruby-identifier">click</span>
+}
+</pre>
+
+<p>Finally, we can define the remaining two controls as well:</p>
+
+<pre class="ruby"><span class="ruby-identifier">biography</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Biography&quot;</span>, 
+  :<span class="ruby-identifier">logtext</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Biography link&quot;</span>, 
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">president_region</span>)
+
+<span class="ruby-identifier">biography</span>.<span class="ruby-identifier">add_goto</span> {
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">link</span>(:<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Biography&quot;</span>).<span class="ruby-identifier">click</span>
+}
+
+<span class="ruby-identifier">cabinet</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Control</span>.<span class="ruby-identifier">new</span>(
+  :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Cabinet&quot;</span>, 
+  :<span class="ruby-identifier">logtext</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Cabinet link&quot;</span>, 
+  :<span class="ruby-identifier">parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">president_region</span>)
+
+<span class="ruby-identifier">cabinet</span>.<span class="ruby-identifier">add_goto</span> {
+  <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">browser</span>.<span class="ruby-identifier">link</span>(:<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Cabinet&quot;</span>).<span class="ruby-identifier">click</span>
+}
+</pre>
+
+<p>And that completes the Page definition.  Now on to the workflow layer.</p>
+
+<h3 id="label-Invoke+the+Workflow">Invoke the Workflow<span><a href="#label-Invoke+the+Workflow">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>To define the workflow layer, let&#39;s edit <code>demo.rb</code>.  First
+we need to require Watir and Parfait:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;watir-webdriver&#39;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&#39;parfait&#39;</span>
+</pre>
+
+<p>Next we want to include our page definition.</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;./page&#39;</span>
+</pre>
+
+<p>Then we can set up the browser, go to the sample page, and tell <a
+href="Parfait.html">Parfait</a> about it.  You&#39;ll want to adjust the
+directory here as necessary.</p>
+
+<pre class="ruby"><span class="ruby-identifier">browser</span> = <span class="ruby-constant">Watir</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-identifier">browser</span>.<span class="ruby-identifier">goto</span> <span class="ruby-node">&quot;file://#{ENV[&#39;HOME&#39;]}/git/parfait/examples/example1/index.html&quot;</span>
+
+<span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">set_browser</span>(<span class="ruby-identifier">browser</span>)
+</pre>
+
+<p>Before we start using our directives, we also need to pass a logging
+routine to <a href="Parfait.html">Parfait</a>.  This routine just tells <a
+href="Parfait.html">Parfait</a> how to log a given string.  For our
+demonstration, we&#39;ll just print to stdout:</p>
+
+<pre class="ruby"><span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-identifier">set_logroutine</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">logstring</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">logstring</span>
+}
+</pre>
+
+<p>And finally, let&#39;s get the Application we defined in
+<code>page.rb</code> saved into an object:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span> = <span class="ruby-constant">Parfait</span><span class="ruby-operator">::</span><span class="ruby-constant">Application</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;Sample App&quot;</span>)
+</pre>
+
+<p>Now we can invoke directives!  With all the setup behind us, it&#39;s now
+pretty straightforward to manipulate the controls on this page.  Let&#39;s
+start by setting our party:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Party&quot;</span>).<span class="ruby-identifier">update</span> <span class="ruby-string">&quot;Republicrat&quot;</span>
+</pre>
+
+<p>Note that the logging for that call indicates both what the control
+contained previously as well as what it has been set to.</p>
+
+<p>Also, remember that under the covers, for any call taking action on
++page(“Sample Page”)+, <a href="Parfait.html">Parfait</a> is using the
+<code>present</code> directive to confirm that the page is still visible
+before continuing.</p>
+
+<p>Any of the directives will work on this control.  If we want to verify that
+it is set as we requested, we can do that as well:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Party&quot;</span>).<span class="ruby-identifier">verify</span> <span class="ruby-string">&quot;Republicrat&quot;</span>
+</pre>
+
+<p>We can submit our change using the “Set My Party” button:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Set My Party&quot;</span>).<span class="ruby-identifier">navigate</span>
+</pre>
+
+<p>Using the Region we defined, we can also easily manipulate controls within
+the table.  To change the nickname for John Adams, we can just target his
+table entry like this:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">region</span>(<span class="ruby-string">&quot;President&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;John Adams&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Nickname&quot;</span>).<span class="ruby-identifier">update</span> <span class="ruby-string">&quot;Sammy&#39;s Bro&quot;</span>
+</pre>
+
+<p>Similarly, we can verify his nickname:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">region</span>(<span class="ruby-string">&quot;President&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;John Adams&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Nickname&quot;</span>).<span class="ruby-identifier">verify</span> <span class="ruby-string">&quot;Sammy&#39;s Bro&quot;</span>
+</pre>
+
+<p>We can also use our Region to navigate to the biography for Thomas
+Jefferson:</p>
+
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">page</span>(<span class="ruby-string">&quot;Sample Page&quot;</span>).<span class="ruby-identifier">region</span>(<span class="ruby-string">&quot;President&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Thomas Jefferson&quot;</span>).<span class="ruby-identifier">control</span>(<span class="ruby-string">&quot;Biography&quot;</span>).<span class="ruby-identifier">navigate</span>
+</pre>
+
+<p>This is a simple example, but hopefully it demonstrates the power and
+flexibility <a href="Parfait.html">Parfait</a> gives you in managing
+controls and using them in the workflow layer of your test automation.</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.2.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
