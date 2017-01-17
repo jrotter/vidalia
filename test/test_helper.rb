@@ -1,14 +1,7 @@
 require 'minitest/autorun'
-require 'parfait'
+require 'vidalia'
 
-module Watir
-  class Browser
-    def initialize
-    end
-  end
-end
-
-module Parfait
+module Vidalia
   class Page
     attr_reader :name
   end
