@@ -60,11 +60,6 @@ module Vidalia
       if object
         if object.is_a?(Vidalia::Object)
           @objects[object.name] = object
-          if object.aliases
-            object.aliases.each do |my_alias|
-              @objects[my_alias] = object
-            end
-          end
         else
           raise "Object must be a Vidalia::Object when being adding to an interface"
         end
@@ -75,11 +70,11 @@ module Vidalia
     end
 
 
-    # Retrieve an object by name or alias.
+    # Retrieve an object by name.
     #
     # *Options*
     #
-    # +name+:: specifies the name or alias of the object
+    # +name+:: specifies the name of the object
     #
     # *Example*
     #

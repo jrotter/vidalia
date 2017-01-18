@@ -36,7 +36,7 @@ class InterfaceTest < Minitest::Test
     assert Vidalia::Interface.find("Interface Three") == int3
   end
 
-  def test_add_object_to_interface_happy_path_no_alias
+  def test_add_object_to_interface_happy_path
     i = Vidalia::Interface.new(:name => "interface")
     o = Vidalia::Object.new(:name => "my object")
     i.add_object(o)
@@ -44,32 +44,12 @@ class InterfaceTest < Minitest::Test
     assert i.object("my object").name == "my object"
   end
 
-  def test_add_object_to_interface_happy_path_alias
-    i = Vidalia::Interface.new(:name => "my interface")
-    o = Vidalia::Object.new(:name => "my object", :aliases => ["x","y","z"])
-    i.add_object(o)
-    assert i.object("my object").is_a?(Vidalia::Object)
-    assert i.object("my object").name == "my object"
-    assert i.object("x").name == "my object"
-    assert i.object("y").name == "my object"
-    assert i.object("z").name == "my object"
-  end
-
-  def test_add_object_to_interface_bad_object_no_alias
+  def test_add_object_to_interface_bad_object
     i = Vidalia::Interface.new(:name => "my interface")
     o = Vidalia::Object.new(:name => "my object")
     i.add_object(o)
     assert_raises(RuntimeError) { 
       i.object("will not be found")
-    }
-  end
-
-  def test_add_object_to_interface_bad_object_aliases
-    a = Vidalia::Interface.new(:name => "my interface")
-    o = Vidalia::Object.new(:name => "my object", :aliases => ["x","y","z"])
-    a.add_object(o)
-    assert_raises(RuntimeError) { 
-      a.object("will not be found")
     }
   end
 

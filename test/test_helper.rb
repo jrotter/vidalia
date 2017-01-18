@@ -2,8 +2,8 @@ require 'minitest/autorun'
 require 'vidalia'
 
 module Vidalia
-  class Page
-    attr_reader :name
+  class Element
+    attr_reader :logtext
   end
 end
 

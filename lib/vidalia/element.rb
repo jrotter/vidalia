@@ -2,8 +2,7 @@ module Vidalia
 
   class Element
   
-    attr_reader :name,
-      :aliases
+    attr_reader :name
   
     # Create a new element object
     #
@@ -11,7 +10,6 @@ module Vidalia
     #
     # +name+:: the name used to identify this element
     # +logtext+:: the text to be used when referring to this element in logs
-    # +aliases+:: specifies an array of aliases for the element
     # +parent+:: specifies the parent Object of this element
     #
     # *Example*
@@ -28,12 +26,10 @@ module Vidalia
     o = {
         :name => nil,
         :logtext => nil,
-        :aliases => [],
         :parent => nil
       }.merge(opts)
       @name = o[:name]
       @logtext = o[:logtext]
-      @aliases = o[:aliases]
       @parent = o[:parent]
 
       if @name
@@ -43,27 +39,23 @@ module Vidalia
       else
         raise "Name must be specified when adding a element"
       end
-      if @logtext
-        unless @logtext.is_a?(String)
-          raise "Logtext must be a String when adding a element"
-        end
-      else
-        raise "Logtext must be specified when adding a element" 
-      end
-      if @aliases
-        unless @aliases.is_a?(Array)
-          raise "Vidalia::Element requires aliases to be an array"
-        end
-        @aliases.each do |my_alias|
-          raise "Vidalia::Element requires each alias in the array to be a string" unless my_alias.is_a?(String)
-        end
-      end
 
       if @parent
         if @parent.is_a? Vidalia::Object
           add_to_object(@parent)
         else
           raise "Parent specified for Element \"#{@name}\", but parent object type unrecognized."
+        end
+      end
+
+      # logtext is optional
+      if @logtext
+        unless @logtext.is_a?(String)
+          raise "Logtext must be a String when adding a element"
+        end
+      else
+        if @parent
+          @logtext = "#{@parent.name} #{@name}"
         end
       end
 
@@ -83,7 +75,6 @@ module Vidalia
     #   )
     #   subject = Vidalia::Element.new(
     #     :name => "Subject",
-    #     :logtext = "subject"
     #   )
     #   subject.add_to_object(blog_post)
     #
@@ -93,6 +84,8 @@ module Vidalia
         case
         when object.is_a?(Vidalia::Object)
           object.add_element(self)
+          @parent = object
+          @logtext = "#{@parent.name} #{@name}" unless @logtext
         else
           raise "Input value must be an Object when adding this Element to a Object"
         end
@@ -113,7 +106,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def get(opts = {})
-      verify_element_presence("get")
       return @get_method.call(opts)
     end
 
@@ -128,7 +120,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def set(value,opts = {})
-      verify_element_presence("set")
       @set_method.call(value,opts)
     end
 
@@ -143,7 +134,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def retrieve(opts = {})
-      verify_element_presence("retrieve")
       return @retrieve_method.call(opts)
     end
 
@@ -158,7 +148,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def update(value,opts = {})
-      verify_element_presence("update")
       @update_method.call(value,opts)
     end
 
@@ -173,7 +162,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def confirm(value,opts = {})
-      verify_element_presence("confirm")
       return @confirm_method.call(value,opts)
     end
 
@@ -188,7 +176,6 @@ module Vidalia
     #
     #   $$$ Need an example $$$
     def verify(value,opts = {})
-      verify_element_presence("verify")
       @verify_method.call(value,opts)
     end
  

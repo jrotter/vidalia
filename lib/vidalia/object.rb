@@ -2,41 +2,29 @@ module Vidalia
 
   class Object
 
-    attr_reader :name,
-      :aliases
+    attr_reader :name
   
     # Create a Vidalia object
     #
     # *Options*
     #
     # +name+:: specifies the name of the object
-    # +aliases+:: specifies an array of aliases for the object
     #
     # *Example*
     #
     #   Vidalia::Object.new(
     #     :name => "Patient Medication", 
-    #     :aliases => ["Medication", "Med", "patient_medication"]
     #   )
     #
     def initialize(opts = {})
       o = {
-        :name => nil,
-        :aliases => []
+        :name => nil
       }.merge(opts)
 
       @name = o[:name]
       raise "Vidalia::Object requires a name to be defined" unless @name
       raise "Vidalia::Object requires name to be a string" unless @name.is_a?(String)
 
-      @aliases = o[:aliases]
-      if @aliases
-        raise "Vidalia::Object requires aliases to be an array" unless @aliases.is_a?(Array)
-        @aliases.each do |my_alias|
-          raise "Vidalia::Object requires each alias in the array to be a string" unless my_alias.is_a?(String)
-        end
-      end
-      
       @elements = Hash.new
       @object_test = nil
     end
@@ -89,7 +77,6 @@ module Vidalia
     #
     #   object = Vidalia::Object.new(
     #     :name => "Patient Medication", 
-    #     :aliases => ["Medication", "Med", "patient_medication"]
     #   )
     #   element = Vidalia::Element.new(
     #     :name => "Name",
@@ -102,11 +89,6 @@ module Vidalia
       if element
         if element.is_a?(Vidalia::Element)
           @elements[element.name] = element
-          if element.aliases
-            element.aliases.each do |my_alias|
-              @elements[my_alias] = element
-            end
-          end
         else
           raise "Element must be a Vidalia::Element when being adding to a Object"
         end
@@ -117,11 +99,11 @@ module Vidalia
     end
 
   
-    # Retrieve a Element object by name or alias.
+    # Retrieve a Element object by name.
     #
     # *Options*
     #
-    # +name+:: specifies the name or alias of the element
+    # +name+:: specifies the name of the element
     #
     # *Example*
     #
