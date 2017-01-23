@@ -10,7 +10,7 @@ end
 
 RDoc::Task.new do |rdoc|
   rdoc.main = "README.rdoc"
-  rdoc.rdoc_files.include("README.rdoc", "FAQ.rdoc", "lib/*","lib/vidalia/application.rb")
+  rdoc.rdoc_files.include("README.rdoc", "FAQ.rdoc", "lib/*","lib/vidalia/*")
 end
 
 desc "Run tests"
