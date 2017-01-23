@@ -9,23 +9,23 @@ module Vidalia
 
     # Define an Artifact
     #
-    # This routine saves the specified Artifact parameters to the master list of Artifacts.
-    # When a user instantiates a Vidalia::Artifact, it will initialize the object with
-    # this data and run the specified block of code.
+    # This routine saves the specified Artifact parameters to the master list 
+    # of Artifacts.  When a user instantiates a Vidalia::Artifact, it will 
+    # initialize the object with this data and run the specified block of code.
     #
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the interface
-    # +block+:: specifies the block of code to be run when the interface object is initialized
+    # +name+:: specifies the name of the Interface
+    # +block+:: specifies the block of code to be run when the Interface object is initialized
     #
     # *Example*
     #
     #   Vidalia::Artifact.define(:name => "Blog API") {
-    #     @db_password = get_parameters_for_database_call(ENV['BLOG_DB_PASSWORD'])
-    #     @db_userid = get_parameters_for_database_call(ENV['BLOG_DB_PASSWORD'])
-    #     @db_ip = get_parameters_for_database_call(ENV['BLOG_DB_IP'])
-    #     @db_port = get_parameters_for_database_call(ENV['BLOG_DB_PORT'])
+    #     @db_password = ENV['BLOG_DB_PASSWORD']
+    #     @db_userid = ENV['BLOG_DB_PASSWORD']
+    #     @db_ip = ENV['BLOG_DB_IP']
+    #     @db_port = ENV['BLOG_DB_PORT']
     #   }
     #
     #
@@ -34,8 +34,7 @@ module Vidalia
         :name => nil,
       }.merge(opts)
 
-      raise "Vidalia::Artifact.define requires :name as a parameter" unless o[:name]
-      raise "Vidalia::Artifact.define requires :name to be a string" unless o[:name].is_a?(String)
+      Vidalia::checkvar(o[:name],String,self.class.ancestors,":name")
 
       objectdata = Hash.new
       o.each do |key,index|
@@ -51,17 +50,16 @@ module Vidalia
     #
     # *Options*
     #
+    # Takes one parameter:
     # +name+:: a string specifying the name of the Artifact
     #
     # *Example*
     #
-    #   Vidalia::find_master_object_data("Blog API")
+    #   Vidalia::Artifact.get_definition_data("Blog API")
     #
     def self.get_definition_data(name)
 
-      raise "Vidalia::Object.get_definition_data requires a name to be defined" unless name
-      raise "Vidalia::Object.get_definition_data requires name to be a string" unless name.is_a?(String)
-
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
       @@definitions[name]
     end
 
@@ -75,7 +73,7 @@ module Vidalia
     # *Options*
     #
     # Takes one parameter:
-    # +name+:: specifies the name of the artifact
+    # +name+:: specifies the name of the Artifact
     #
     # *Example*
     #
@@ -85,8 +83,7 @@ module Vidalia
 
       @children = Hash.new
       @name = name
-      raise "Vidalia::Artifact name must be specified" unless @name
-      raise "Vidalia::Artifact name must be a string" unless @name.is_a?(String)
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
 
       objectdata = Vidalia::Artifact.get_definition_data(@name)
 
@@ -100,15 +97,16 @@ module Vidalia
     end
 
 
-    # Find an interface definition by name
+    # Find an Artifact definition by name
     #
     # *Options*
     #
-    # +name+:: specifies the name of the interface to search for
+    # Takes one parameter:
+    # +name+:: specifies the name of the Artifact to search for
     #
     # *Example*
     #
-    #   blog_api = Vidalia::Interface.find("Blog API")
+    #   blog_api = Vidalia::Artifact.find_definition("Blog API")
     #
     def self.find_definition(name)
       @@interface_definitions[name]
@@ -124,15 +122,13 @@ module Vidalia
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" artifacts must be predefined
+    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
     #   blog_api = Vidalia::Artifact.new("Blog API")
     #   blog_post = Vidalia::Artifact.new("Blog Post")
     #   blog_api.add_child(blog_post)
     #
     def add_child(object)
-      unless object.is_a?(Vidalia::Artifact)
-        raise "Vidalia::Artifact.add_child requires object parameter to be a Vidalia::Artifact"
-      end
+      Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
       @children[object.name] = object
       object
     end
@@ -147,16 +143,14 @@ module Vidalia
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" artifacts must be predefined
+    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
     #   blog_api = Vidalia::Artifact.new("Blog API")
     #   blog_post = Vidalia::Artifact.new("Blog Post")
     #   blog_api.add_child(blog_post)
     #   my_child = blog_api.get_child("Blog Post")
     #
     def get_child(name)
-      unless name.is_a?(String)
-        raise "Vidalia::Artifact.get_child requires object parameter to be a String"
-      end
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
       @children[name]
     end
 
@@ -170,15 +164,13 @@ module Vidalia
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" artifacts must be predefined
+    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
     #   blog_api = Vidalia::Artifact.new("Blog API")
     #   blog_post = Vidalia::Artifact.new("Blog Post")
     #   blog_post.set_parent(blog_api)
     # 
     def set_parent(object)
-      unless object.is_a?(Vidalia::Artifact)
-        raise "Vidalia::Artifact.set_parent requires object parameter to be a Vidalia::Artifact"
-      end
+      Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
       @parent = object
       object
     end

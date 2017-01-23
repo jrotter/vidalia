@@ -32,10 +32,20 @@ class ArtifactTest < Minitest::Test
     assert a.is_a?(Vidalia::Artifact)
 
     Vidalia::Artifact.define(:name => "n",:otherstuff => "hello") {$var = "bird"} 
+    Vidalia::Artifact.define(:name => "o",:foo => "bar") {$var = "rafaelli"} 
+    Vidalia::Artifact.define(:name => "p",:monkey => "pants") {$var = "silly"} 
     $var = "dinosaur"
     a = Vidalia::Artifact.new("n")
     assert $var == "bird"
     assert a.name == "n"
+    assert a.is_a?(Vidalia::Artifact)
+    a = Vidalia::Artifact.new("o")
+    assert $var == "rafaelli"
+    assert a.name == "o"
+    assert a.is_a?(Vidalia::Artifact)
+    a = Vidalia::Artifact.new("p")
+    assert $var == "silly"
+    assert a.name == "p"
     assert a.is_a?(Vidalia::Artifact)
   end
 
@@ -57,11 +67,24 @@ class ArtifactTest < Minitest::Test
 
   def test_add_and_get_child
     Vidalia::Artifact.define(:name => "parent") {$var = "p"} 
-    Vidalia::Artifact.define(:name => "child") {$var = "c"} 
+    Vidalia::Artifact.define(:name => "child A") {$var = "c"} 
+    Vidalia::Artifact.define(:name => "child B") {$var = "c"} 
+    Vidalia::Artifact.define(:name => "child C") {$var = "c"} 
     p = Vidalia::Artifact.new("parent")
-    c = Vidalia::Artifact.new("child")
+    a = Vidalia::Artifact.new("child A")
+    b = Vidalia::Artifact.new("child B")
+    c = Vidalia::Artifact.new("child C")
+    assert p.add_child(a) == a
+    assert p.get_child("child A") == a
+    assert p.get_child("none") == nil
+    assert p.add_child(b) == b
+    assert p.get_child("child A") == a
+    assert p.get_child("child B") == b
+    assert p.get_child("none") == nil
     assert p.add_child(c) == c
-    assert p.get_child("child") == c
+    assert p.get_child("child A") == a
+    assert p.get_child("child B") == b
+    assert p.get_child("child C") == c
     assert p.get_child("none") == nil
   end
 

@@ -3,64 +3,116 @@ require 'test_helper'
 
 class InterfaceTest < Minitest::Test
 
-  def test_interface_initialize
-    my_interface = Vidalia::Interface.new(:name => "a")
-    assert my_interface.is_a? Vidalia::Interface
+  def test_interface_definition_happy_path
+    Vidalia::Interface.define(:name => "n") {$var = "dog"} 
+    assert Vidalia::Interface.get_definition_data("n")[:name] == "n"
+    assert Vidalia::Interface.get_definition_data("n")[:initialization_block].is_a?(Proc)
   end
 
-  def test_interface_initialize_no_name
-    # No name
+  def test_interface_definition_parameter_checking
     assert_raises(RuntimeError) { 
-      my_interface = Vidalia::Interface.new
+      Vidalia::Interface.define(:name => 2) {|var| var = "dog"}
+    }
+    assert_raises(RuntimeError) { 
+      Vidalia::Interface.define() {|var| var = "dog"}
     }
   end
 
-  def test_interface_find
-    assert Vidalia::Interface.find("Interface One") == nil
-    assert Vidalia::Interface.find("Interface Two") == nil
-    assert Vidalia::Interface.find("Interface Three") == nil
+  def test_interface_definition_and_creation_happy_path
+    Vidalia::Interface.define(:name => "n") {$var = "dog"} 
+    $var = "cat"
+    a = Vidalia::Interface.new("n")
+    assert $var == "dog"
+    assert a.name == "n"
+    assert a.is_a?(Vidalia::Interface)
 
-    int1 = Vidalia::Interface.new(:name => "Interface One")
-    assert Vidalia::Interface.find("Interface One") == int1
-    assert Vidalia::Interface.find("Interface Two") == nil
-    assert Vidalia::Interface.find("Interface Three") == nil
-
-    int2 = Vidalia::Interface.new(:name => "Interface Two")
-    assert Vidalia::Interface.find("Interface One") == int1
-    assert Vidalia::Interface.find("Interface Two") == int2
-    assert Vidalia::Interface.find("Interface Three") == nil
-
-    int3 = Vidalia::Interface.new(:name => "Interface Three")
-    assert Vidalia::Interface.find("Interface One") == int1
-    assert Vidalia::Interface.find("Interface Two") == int2
-    assert Vidalia::Interface.find("Interface Three") == int3
+    Vidalia::Interface.define(:name => "n") {$var = "N"} 
+    Vidalia::Interface.define(:name => "o") {$var = "O"} 
+    Vidalia::Interface.define(:name => "p") {$var = "P"} 
+    $var = "X"
+    a = Vidalia::Interface.new("n")
+    assert $var == "N"
+    assert a.name == "n"
+    assert a.is_a?(Vidalia::Interface)
+    a = Vidalia::Interface.new("o")
+    assert $var == "O"
+    assert a.name == "o"
+    assert a.is_a?(Vidalia::Interface)
+    a = Vidalia::Interface.new("p")
+    assert $var == "P"
+    assert a.name == "p"
+    assert a.is_a?(Vidalia::Interface)
   end
 
-  def test_add_object_to_interface_happy_path
-    i = Vidalia::Interface.new(:name => "interface")
-    o = Vidalia::Object.new(:name => "my object")
-    i.add_object(o)
-    assert i.object("my object").is_a?(Vidalia::Object)
-    assert i.object("my object").name == "my object"
-  end
-
-  def test_add_object_to_interface_bad_object
-    i = Vidalia::Interface.new(:name => "my interface")
-    o = Vidalia::Object.new(:name => "my object")
-    i.add_object(o)
+  def test_interface_creation_error_checking
+    Vidalia::Interface.define(:name => "n") {$var = "dog"} 
     assert_raises(RuntimeError) { 
-      i.object("will not be found")
+      Vidalia::Interface.new("Undefined Name")
+    }
+    assert_raises(RuntimeError) { 
+      Vidalia::Interface.new(:name => "n")
+    }
+    assert_raises(RuntimeError) { 
+      Vidalia::Interface.new(:n)
+    }
+    assert_raises(RuntimeError) { 
+      Vidalia::Interface.new(["not","a","string"])
     }
   end
 
-  def test_add_wrong_structure_to_interface
-    i = Vidalia::Interface.new(:name => "i")
-    i2 = Vidalia::Interface.new(:name => "i2")
-    o = Vidalia::Object.new(:name => "o")
-    e = Vidalia::Element.new(:name => "e",:logtext => "l")
-    assert i.add_object(o).is_a?(Vidalia::Interface)
-    assert_raises(RuntimeError) { i.add_object(i2) }
-    assert_raises(RuntimeError) { i.add_object(e) }
+  def test_add_and_get_object
+    Vidalia::Interface.define(:name => "par") {$var = "p"} 
+    Vidalia::Object.define(:name => "c1", :interface_name => "par") {$var = "1"} 
+    Vidalia::Object.define(:name => "c2", :interface_name => "par") {$var = "2"} 
+    Vidalia::Object.define(:name => "c3", :interface_name => "par") {$var = "3"} 
+    p = Vidalia::Interface.new("parent")
+    c1 = Vidalia::Object.new("c1")
+    c2 = Vidalia::Object.new("c2")
+    c3 = Vidalia::Object.new("c3")
+    assert p.add_object(c1) == c1
+    assert p.object("c1") == c1
+    assert p.object("none") == nil
+    assert p.add_object(c2) == c2
+    assert p.object("c1") == c1
+    assert p.object("c2") == c2
+    assert p.object("none") == nil
+    assert p.add_object(c3) == c3
+    assert p.object("c1") == c1
+    assert p.object("c2") == c2
+    assert p.object("c3") == c3
+    assert p.object("none") == nil
+  end
+
+  def test_add_object_validity_checking
+    Vidalia::Interface.define(:name => "parent") {$var = "p"} 
+    Vidalia::Interface.define(:name => "other") {$var = "p"} 
+    Vidalia::Object.define(:name => "chi",:interface_name => "par") {$var = "c"} 
+    p = Vidalia::Interface.new("par")
+    c = Vidalia::Object.new("chi")
+    o = Vidalia::Interface.new("other")
+    assert_raises(RuntimeError) { 
+      p.add_object(2)
+    }
+    assert_raises(RuntimeError) { 
+      p.add_object("child")
+    }
+    assert_raises(RuntimeError) { 
+      p.add_object(o)
+    }
+  end
+
+  def test_object_validity_checking
+    Vidalia::Interface.define(:name => "par") {$var = "p"} 
+    Vidalia::Object.define(:name => "chi",:interface_name => "par") {$var = "c"} 
+    p = Vidalia::Interface.new("par")
+    c = Vidalia::Object.new("chi")
+    assert p.add_object(c) == c
+    assert_raises(RuntimeError) { 
+      p.object(:chi)
+    }
+    assert_raises(RuntimeError) { 
+      p.object(c)
+    }
   end
 
 end

@@ -1,121 +1,148 @@
 module Vidalia
 
-  class Object
+  class Object < Artifact
+ 
+    attr_reader :name, :parent
 
-    attr_reader :name
-  
-    # Create a Vidalia object
+    # Define an Object (inherited from Vidalia::Artifact)
+    #
+    # This routine saves the specified Object parameters to the master list 
+    # of Objects.  When a user instantiates a Vidalia::Object, it will 
+    # initialize the Object with this data and run the specified block of code.
     #
     # *Options*
     #
-    # +name+:: specifies the name of the object
+    # Takes a hash as input where the current options are:
+    # +name+:: specifies the name of the Object
+    # +interface+:: specifies the Interface that the Object is associated with
+    # +block+:: specifies the block of code to be run when the Object is initialized
     #
     # *Example*
     #
-    #   Vidalia::Object.new(
-    #     :name => "Patient Medication", 
-    #   )
+    #   Vidalia::Object.define(:name => "Blog Post",:interface => "Blog API") {
+    #     @data = {
+    #       "subject" => nil,
+    #       "body" => nil,
+    #       "author" => nil,
+    #       "date_posted" => nil
+    #     }
+    #   }
     #
-    def initialize(opts = {})
-      o = {
-        :name => nil
-      }.merge(opts)
-
-      @name = o[:name]
-      raise "Vidalia::Object requires a name to be defined" unless @name
-      raise "Vidalia::Object requires name to be a string" unless @name.is_a?(String)
-
-      @elements = Hash.new
-      @object_test = nil
-    end
-
-  
-    # Add this Object to an Interface
-    #
-    # If the specified interface does not exist, it will be added
-    #
-    # *Options*
-    #
-    # +interface+:: specifies the Interface to add this object to, either via the String name or the Vidalia::Interface object
-    #
-    # *Example*
-    #
-    #   myobject = Vidalia::Object.new(
-    #     :name => "Blog Post" 
-    #   )
-    #   myobject.add_to_interface("Blogger API")
-    #
-    def add_to_interface(interface)
-
-      if interface
-        case
-        when interface.is_a?(String)
-          int = Vidalia::Interface.find(interface)
-          unless int
-            int = Vidalia::Interface.new(:name => interface)
-          end
-          int.add_object(self)
-        when interface.is_a?(Vidalia::Interface)
-          interface.add_object(self)
-        else
-          raise "Input value must be a String or an Interface object when adding this Object to an Interface"
-        end
-      else
-        raise "Input value cannot be nil when when adding this Object to an Interface"
-      end
-      self
+    def self.define(opts = {}, &block)
+      super
     end
 
 
-    # Add a Element to the current Object
+    # Get Vidalia master Object data
     #
     # *Options*
     #
-    # +element+:: specifies the Element object to be added
+    # Takes one parameter:
+    # +name+:: a string specifying the name of the Object
     #
     # *Example*
     #
-    #   object = Vidalia::Object.new(
-    #     :name => "Patient Medication", 
-    #   )
-    #   element = Vidalia::Element.new(
-    #     :name => "Name",
-    #     :text => "medication name"
-    #   )
-    #   object.add_element(element)
+    #   Vidalia::Object.get_definition_data("Blog Post")
+    #
+    def self.get_definition_data(name)
+      super
+    end
+
+  
+    # Create an Object (inherited from Vidalia::Artifact)
+    #
+    # Initializes a Vidalia::Object using the data set in 
+    # Vidalia::Object.define.  If such data does not exist, this routine will 
+    # error out.  This ensures that all Objects have been predefined.
+    #
+    # *Options*
+    #
+    # Takes one parameter:
+    # +name+:: specifies the name of the Object
+    #
+    # *Example*
+    #
+    #   blog_post = Vidalia::Interface.new("Blog Post")
+    #
+    def initialize(name)
+      super
+    end
+
+
+    # Find an Object definition by name (inherited from Vidalia::Artifact)
+    #
+    # *Options*
+    #
+    # Takes one parameter:
+    # +name+:: specifies the name of the Object to search for
+    #
+    # *Example*
+    #
+    #   blog_post = Vidalia::Object.find_definition("Blog Post")
+    #
+    def self.find_definition(name)
+      super
+    end
+
+  
+    # Add a child Element to this Object
+    #
+    # *Options*
+    #
+    # This method takes one parameter:
+    # +element+:: specifies a Vidalia::Element to be added as a child
+    #
+    # *Example*
+    #
+    #   blog_post = Vidalia::Object.new("Blog Post")
+    #   subject = Vidalia::Element.new("Subject")
+    #   blog_post.add_element(subject)
     #
     def add_element(element)
-
-      if element
-        if element.is_a?(Vidalia::Element)
-          @elements[element.name] = element
-        else
-          raise "Element must be a Vidalia::Element when being adding to a Object"
-        end
-      else
-        raise "Element must be specified when adding a Element to an Object"
-      end
-      self
+      Vidalia::checkvar(element,Vidalia::Element,self.class.ancestors,"child element")
+      add_child(element)
     end
 
-  
-    # Retrieve a Element object by name.
+
+    # Get a child Element from this Object
     #
     # *Options*
     #
-    # +name+:: specifies the name of the element
+    # This method takes one parameter:
+    # +name+:: specifies the name of a Vidalia::Element that is a child of this Object
     #
     # *Example*
     #
-    #   myobject.element("ZIP Code")
-    def element(requested_name)
-      element = @elements[requested_name] 
-      if element
-        return element
-      else
-        raise "Invalid element name requested: \"#{requested_name}\""
-      end
+    #   blog_post = Vidalia::Object.new("Blog Post")
+    #   subject = Vidalia::Element.new("Subject")
+    #   blog_post.add_element(subject)
+    #   my_child = blog_post.element("Subject")
+    #
+    def element(name)
+      Vidalia::checkvar(name,String,self.class.ancestors,"element name")
+      get_child(name)
     end
+
+
+    # Set the parent Interface of this Object
+    #
+    # *Options*
+    #
+    # This method takes one parameter
+    # +interface+:: specifies a Vidalia::Interface to be set as the parent
+    #
+    # *Example*
+    #
+    #   # Note that both the "Blog API" and "Blog Post" Objects must be predefined
+    #   blog_api = Vidalia::Object.new("Blog API")
+    #   blog_post = Vidalia::Object.new("Blog Post")
+    #   blog_post.set_parent(blog_api)
+    # 
+    def set_parent(interface)
+      Vidalia::checkvar(interface,Vidalia::Interface,self.class.ancestors,"parent interface")
+      super
+    end
+  
     
   end
 
