@@ -65,7 +65,7 @@ class InterfaceTest < Minitest::Test
     Vidalia::Object.define(:name => "c1", :interface_name => "par") {$var = "1"} 
     Vidalia::Object.define(:name => "c2", :interface_name => "par") {$var = "2"} 
     Vidalia::Object.define(:name => "c3", :interface_name => "par") {$var = "3"} 
-    p = Vidalia::Interface.new("parent")
+    p = Vidalia::Interface.new("par")
     c1 = Vidalia::Object.new("c1")
     c2 = Vidalia::Object.new("c2")
     c3 = Vidalia::Object.new("c3")
@@ -84,7 +84,7 @@ class InterfaceTest < Minitest::Test
   end
 
   def test_add_object_validity_checking
-    Vidalia::Interface.define(:name => "parent") {$var = "p"} 
+    Vidalia::Interface.define(:name => "par") {$var = "p"} 
     Vidalia::Interface.define(:name => "other") {$var = "p"} 
     Vidalia::Object.define(:name => "chi",:interface_name => "par") {$var = "c"} 
     p = Vidalia::Interface.new("par")

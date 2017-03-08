@@ -1,370 +1,110 @@
 module Vidalia
 
-  class Element
-  
-    attr_reader :name
-  
-    # Create a new element object
-    #
-    # *Options*
-    #
-    # +name+:: the name used to identify this element
-    # +logtext+:: the text to be used when referring to this element in logs
-    # +parent+:: specifies the parent Object of this element
-    #
-    # *Example*
-    #
-    #   myobject = Vidalia::Object.new(
-    #     :name => "Blog Post"
-    #   )
-    #   newelement = Vidalia::Element.new(
-    #     :name => "Subject",
-    #     :logtext = "blog post subject",
-    #     :parent => myobject
-    #   )
-    def initialize(opts = {})
-    o = {
-        :name => nil,
-        :logtext => nil,
-        :parent => nil
-      }.merge(opts)
-      @name = o[:name]
-      @logtext = o[:logtext]
-      @parent = o[:parent]
-
-      if @name
-        unless @name.is_a?(String)
-          raise "Name must be a String when adding a element"
-        end
-      else
-        raise "Name must be specified when adding a element"
-      end
-
-      if @parent
-        if @parent.is_a? Vidalia::Object
-          add_to_object(@parent)
-        else
-          raise "Parent specified for Element \"#{@name}\", but parent object type unrecognized."
-        end
-      end
-
-      # logtext is optional
-      if @logtext
-        unless @logtext.is_a?(String)
-          raise "Logtext must be a String when adding a element"
-        end
-      else
-        if @parent
-          @logtext = "#{@parent.name} #{@name}"
-        end
-      end
-
-    end
-
-
-    # Add this Element to an Object
-    #
-    # *Options*
-    #
-    # +object+:: specifies a Vidalia::Object to add this Element to
-    #
-    # *Example*
-    #
-    #   blog_post = Vidalia::Object.new(
-    #     :name => "Blog Post"
-    #   )
-    #   subject = Vidalia::Element.new(
-    #     :name => "Subject",
-    #   )
-    #   subject.add_to_object(blog_post)
-    #
-    def add_to_object(object)
-
-      if object
-        case
-        when object.is_a?(Vidalia::Object)
-          object.add_element(self)
-          @parent = object
-          @logtext = "#{@parent.name} #{@name}" unless @logtext
-        else
-          raise "Input value must be an Object when adding this Element to a Object"
-        end
-      else
-        raise "Input value cannot be nil when adding this Element to a Object"
-      end
-      self
-    end
-
-
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def get(opts = {})
-      return @get_method.call(opts)
-    end
-
-  
-    # Set the value for this element
-    #
-    # *Options*
-    #
-    # +value+:: specifies the value that this element will be set to
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def set(value,opts = {})
-      @set_method.call(value,opts)
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def retrieve(opts = {})
-      return @retrieve_method.call(opts)
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def update(value,opts = {})
-      @update_method.call(value,opts)
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def confirm(value,opts = {})
-      return @confirm_method.call(value,opts)
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def verify(value,opts = {})
-      @verify_method.call(value,opts)
-    end
+  class Element < Artifact
  
- 
-    # Method description
+    attr_reader :name, :parent
+
+    # Define an Element (inherited from Vidalia::Artifact)
+    #
+    # This routine saves the specified Element parameters to the master list 
+    # of Elements.  When a user instantiates a Vidalia::Element, it will 
+    # initialize the Element with this data and run the specified block of code.
     #
     # *Options*
     #
-    # +option+:: specifies something
+    # Takes a hash as input where the current options are:
+    # +name+:: specifies the name of the Element
+    # +object+:: specifies the Object that the Element is associated with
+    # +block+:: specifies the block of code to be run when the Element is initialized
     #
     # *Example*
     #
-    #   $$$ Need an example $$$
-    def add_get(&block)
-      @get_method = block
-  
-      add_generic_retrieve() unless @retrieve_method
-      add_generic_confirm() unless @confirm_method
-      add_generic_verify() unless @verify_method
-      if @set_method != nil
-        add_generic_update unless @update_method
-      end 
+    #   Vidalia::Element.define(:name => "Blog Post",:object => "Blog API") {
+    #     @data = {
+    #       "subject" => nil,
+    #       "body" => nil,
+    #       "author" => nil,
+    #       "date_posted" => nil
+    #     }
+    #   }
+    #
+    def self.define(opts = {}, &block)
+      super
+    end
+
+
+    # Get Vidalia master Element data
+    #
+    # *Options*
+    #
+    # Takes one parameter:
+    # +name+:: a string specifying the name of the Element
+    #
+    # *Example*
+    #
+    #   Vidalia::Element.get_definition_data("Blog Post")
+    #
+    def self.get_definition_data(name)
+      super
     end
 
   
-    # Method description
+    # Create an Element (inherited from Vidalia::Artifact)
+    #
+    # Initializes a Vidalia::Element using the data set in 
+    # Vidalia::Element.define.  If such data does not exist, this routine will 
+    # error out.  This ensures that all Elements have been predefined.
     #
     # *Options*
     #
-    # +option+:: specifies something
+    # Takes one parameter:
+    # +name+:: specifies the name of the Element
     #
     # *Example*
     #
-    #   $$$ Need an example $$$
-    def add_set(&block)
-      @set_method = block
+    #   blog_post = Vidalia::Object.new("Blog Post")
+    #
+    def initialize(name)
+      super
+    end
+
+
+    # Find an Element definition by name (inherited from Vidalia::Artifact)
+    #
+    # *Options*
+    #
+    # Takes one parameter:
+    # +name+:: specifies the name of the Element to search for
+    #
+    # *Example*
+    #
+    #   blog_post = Vidalia::Element.find_definition("Blog Post")
+    #
+    def self.find_definition(name)
+      super
+    end
+
+  
+    # Set the parent Object of this Element
+    #
+    # *Options*
+    #
+    # This method takes one parameter
+    # +object+:: specifies a Vidalia::Object to be set as the parent
+    #
+    # *Example*
+    #
+    #   # Note that both the "Blog API" and "Blog Post" Elements must be predefined
+    #   blog_api = Vidalia::Element.new("Blog API")
+    #   blog_post = Vidalia::Element.new("Blog Post")
+    #   blog_post.set_parent(blog_api)
+    # 
+    def set_parent(object)
+      Vidalia::checkvar(object,Vidalia::Object,self.class.ancestors,"parent object")
+      super
+    end
+  
     
-      if @get_method != nil
-        add_generic_update() unless @update_method
-      end 
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_update(&block)
-      @update_method = block
-    end
-
-
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_retrieve(&block)
-      @retrieve_method = block
-    end
-
-
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_verify(&block)
-      @verify_method = block
-    end
-
-
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_confirm(&block)
-      @confirm_method = block
-    end
- 
-
-    # Method description
-    #
-    # Depends on get, retrieve, set 
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_generic_update()
-      add_update { |value,opts|
-        new_value = value
-        found_value = retrieve()
-        if new_value == found_value
-          capital_text = @logtext
-          capital_text[0] = capital_text[0].capitalize
-          Vidalia.log("#{capital_text} is already set to \"#{new_value}\"")
-        else
-          Vidalia.log("Entering #{@logtext}: \"#{new_value}\" (was \"#{found_value}\")")
-          set(new_value,opts)
-        end
-      }
-    end
-
-  
-    # Method description
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_generic_retrieve()
-      add_retrieve { |opts|
-        get(opts)
-      }
-    end
-
- 
-    # Method description
-    #
-    # Depends on get, retrieve 
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_generic_verify()
-      add_verify { |value,opts|
-        found_value = retrieve()
-        if value == found_value
-          Vidalia.log("Verified #{@logtext} to be \"#{value}\"")
-        else
-          raise "Expected #{@logtext} to be \"#{value}\", but found \"#{found_value}\" instead"
-        end
-        true
-      }    
-    end
- 
- 
-    # Method description
-    #
-    # Depends on get, retrieve 
-    #
-    # *Options*
-    #
-    # +option+:: specifies something
-    #
-    # *Example*
-    #
-    #   $$$ Need an example $$$
-    def add_generic_confirm()
-      add_confirm { |value,opts|
-        retval = false
-        found_value = retrieve()
-        if value == found_value
-          retval = true
-        end
-        retval
-      }        
-    end
- 
- 
   end
 
 end

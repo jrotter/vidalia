@@ -1,3 +1,4 @@
+require 'vidalia/artifact'
 require 'vidalia/interface'
 require 'vidalia/object'
 require 'vidalia/element'
@@ -42,6 +43,29 @@ module Vidalia
   #   Vidalia.log("Everything is fine - no bugs here.",:style => fatal_error)
   def Vidalia.log(string,opts = {})
     return Thread.current[:vidalia_logroutine].call(string,opts)
+  end
+
+
+  # Check the type and existence of a variable
+  #
+  # *Options*
+  #
+  # +thing+:: specifies the veriable to check
+  # +thingtype+:: specifies the desired type of the variable data
+  # +procclass+:: specifies the class of the calling method
+  # +procname+:: specifies the name of the calling method
+  #
+  # *Example*
+  #
+  #   Vidalia.log("Everything is fine - no bugs here.",:style => fatal_error)
+  def Vidalia.checkvar(thing,thingtype,procclass,thingname)
+    if thing
+      unless thing.is_a?(thingtype)
+        raise "#{procclass.first}: #{thingname} should be a #{thingtype}, but was a #{thing.class} instead"
+      end
+    else
+      raise "#{procclass.first}: #{thingname} must be specified"
+    end
   end
 
 

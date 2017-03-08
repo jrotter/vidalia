@@ -82,12 +82,11 @@ module Vidalia
     def initialize(name)
 
       @children = Hash.new
-      @name = name
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      @name = name
 
       objectdata = Vidalia::Artifact.get_definition_data(@name)
 
-      puts "Objectdata == #{objectdata}\n"
       unless objectdata
         raise "Cannot find definition data for Vidalia::Artifact name \"#{name}\".  Make sure you've defined it first!"
       end
