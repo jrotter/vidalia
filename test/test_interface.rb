@@ -5,8 +5,8 @@ class InterfaceTest < Minitest::Test
 
   def test_interface_definition_happy_path
     Vidalia::Interface.define(:name => "n") {$var = "dog"} 
-    assert Vidalia::Interface.get_definition_data("n")[:name] == "n"
-    assert Vidalia::Interface.get_definition_data("n")[:initialization_block].is_a?(Proc)
+    assert Vidalia::Interface.get_definition_data("n",Vidalia::Interface)[:name] == "n"
+    assert Vidalia::Interface.get_definition_data("n",Vidalia::Interface)[:initialization_block].is_a?(Proc)
   end
 
   def test_interface_definition_parameter_checking

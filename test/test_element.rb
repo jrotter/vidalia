@@ -5,8 +5,8 @@ class ElementTest < Minitest::Test
 
   def test_object_definition_happy_path
     Vidalia::Element.define(:name => "n") {$var = "dog"} 
-    assert Vidalia::Element.get_definition_data("n")[:name] == "n"
-    assert Vidalia::Element.get_definition_data("n")[:initialization_block].is_a?(Proc)
+    assert Vidalia::Element.get_definition_data("n",Vidalia::Element)[:name] == "n"
+    assert Vidalia::Element.get_definition_data("n",Vidalia::Element)[:initialization_block].is_a?(Proc)
   end
 
   def test_object_definition_parameter_checking

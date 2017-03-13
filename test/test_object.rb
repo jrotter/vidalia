@@ -5,8 +5,8 @@ class ObjectTest < Minitest::Test
 
   def test_interface_definition_happy_path
     Vidalia::Object.define(:name => "n") {$var = "dog"} 
-    assert Vidalia::Object.get_definition_data("n")[:name] == "n"
-    assert Vidalia::Object.get_definition_data("n")[:initialization_block].is_a?(Proc)
+    assert Vidalia::Object.get_definition_data("n",Vidalia::Object)[:name] == "n"
+    assert Vidalia::Object.get_definition_data("n",Vidalia::Object)[:initialization_block].is_a?(Proc)
   end
 
   def test_interface_definition_parameter_checking

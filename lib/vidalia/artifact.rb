@@ -16,7 +16,8 @@ module Vidalia
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
+    # +name+:: specifies the name of the Artifact
+    # +name+:: specifies the type of the Artifact
     # +block+:: specifies the block of code to be run when the Interface object is initialized
     #
     # *Example*
@@ -32,16 +33,20 @@ module Vidalia
     def self.define(opts = {}, &block)
       o = {
         :name => nil,
+        :type => nil
       }.merge(opts)
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,":name")
+      Vidalia::checkvar(o[:type],Class,self.class.ancestors,"type")
 
       objectdata = Hash.new
       o.each do |key,index|
         objectdata[key] = index
       end
       objectdata[:initialization_block] = block
-      @@definitions[o[:name]] = objectdata
+
+      @@definitions[o[:type]] = Hash.new if !@@definitions[o[:type]]
+      @@definitions[o[:type]][o[:name]] = objectdata
       objectdata
     end
 
@@ -57,10 +62,12 @@ module Vidalia
     #
     #   Vidalia::Artifact.get_definition_data("Blog API")
     #
-    def self.get_definition_data(name)
+    def self.get_definition_data(name,type)
 
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
-      @@definitions[name]
+      Vidalia::checkvar(type,Class,self.class.ancestors,"type")
+
+      @@definitions[type][name]
     end
 
   
@@ -84,8 +91,8 @@ module Vidalia
       @children = Hash.new
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
       @name = name
-
-      objectdata = Vidalia::Artifact.get_definition_data(@name)
+      @type = Vidalia::Artifact unless @type
+      objectdata = Vidalia::Artifact.get_definition_data(@name,@type)
 
       unless objectdata
         raise "Cannot find definition data for Vidalia::Artifact name \"#{name}\".  Make sure you've defined it first!"

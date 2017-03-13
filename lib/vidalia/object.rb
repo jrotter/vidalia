@@ -29,6 +29,7 @@ module Vidalia
     #   }
     #
     def self.define(opts = {}, &block)
+      opts[:type] = Vidalia::Object
       super
     end
 
@@ -44,7 +45,7 @@ module Vidalia
     #
     #   Vidalia::Object.get_definition_data("Blog Post")
     #
-    def self.get_definition_data(name)
+    def self.get_definition_data(name,type)
       super
     end
 
@@ -62,9 +63,10 @@ module Vidalia
     #
     # *Example*
     #
-    #   blog_post = Vidalia::Interface.new("Blog Post")
+    #   blog_post = Vidalia::Object.new("Blog Post")
     #
     def initialize(name)
+      @type = Vidalia::Object
       super
     end
 
