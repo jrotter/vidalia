@@ -1,23 +1,25 @@
-require 'watir-webdriver'
-require 'parfait'
+require 'vidalia'
 
-# Load in the page definition
-require './page'
+# This is just scaffolding for the test.  Build the database.
+require './db_helper'
 
-# Get the Application object (which has been pre-set by the control layer)
-app = Parfait::Application.find("Sample App")
+# Load in the object definition
+require './user_object'
 
-# Get a Watir browser and point to the sample page
-browser = Watir::Browser.new
-browser.goto "file://#{ENV['HOME']}/git/parfait/examples/example1/index.html"
-
-# Give the browser object to Parfait
-Parfait::set_browser(browser)
-
-# Set a logroutine for Parfait
-Parfait::set_logroutine { |logstring|
+# Set a logroutine for Vidalia
+Vidalia::set_logroutine { |logstring|
   puts logstring
 }
+
+# Get the Interface object (which has been pre-set by the control layer)
+db = Vidalia::Interface.new(:name => "Application DB")
+
+user_object = db.object("User")
+
+
+
+###################3
+
 
 # Update the "Party" value
 app.page("Sample Page").control("Party").update "Republicrat"
