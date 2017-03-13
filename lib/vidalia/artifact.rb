@@ -13,6 +13,10 @@ module Vidalia
     # of Artifacts.  When a user instantiates a Vidalia::Artifact, it will 
     # initialize the object with this data and run the specified block of code.
     #
+    # *Return Value*
+    #
+    # This routine returns a unique ID of the defined Artifact
+    #
     # *Options*
     #
     # Takes a hash as input where the current options are:
@@ -33,21 +37,24 @@ module Vidalia
     def self.define(opts = {}, &block)
       o = {
         :name => nil,
-        :type => nil
+        :parent => nil
       }.merge(opts)
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,":name")
-      Vidalia::checkvar(o[:type],Class,self.class.ancestors,"type")
+      if o[:parent]
+        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
+      end
 
       objectdata = Hash.new
       o.each do |key,index|
         objectdata[key] = index
       end
       objectdata[:initialization_block] = block
+      objectdata[:id] = Vidalia::Identifier.new
 
-      @@definitions[o[:type]] = Hash.new if !@@definitions[o[:type]]
-      @@definitions[o[:type]][o[:name]] = objectdata
-      objectdata
+      @@definitions[o[:parent]] = Hash.new if !@@definitions[o[:parent]]
+      @@definitions[o[:parent]][o[:name]] = objectdata
+      objectdata[:id]
     end
 
 
@@ -57,17 +64,20 @@ module Vidalia
     #
     # Takes one parameter:
     # +name+:: a string specifying the name of the Artifact
+    # +parent+:: a fixnum specifying the id of the parent Artifact
     #
     # *Example*
     #
     #   Vidalia::Artifact.get_definition_data("Blog API")
     #
-    def self.get_definition_data(name,type)
+    def self.get_definition_data(name,parent)
 
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
-      Vidalia::checkvar(type,Class,self.class.ancestors,"type")
+      if parent
+        Vidalia::checkvar(parent,Vidalia::Identifier,self.class.ancestors,"parent")
+      end
 
-      @@definitions[type][name]
+      @@definitions[parent][name]
     end
 
   
@@ -79,25 +89,38 @@ module Vidalia
     #
     # *Options*
     #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Artifact
+    # Takes a hash as input where the current options are:
+    # +name+:: specifies the name of the Interface
+    # +parent+:: specifies the Vidalia::Identifier of the parent object
     #
     # *Example*
     #
     #   blog_api = Vidalia::Interface.new("Blog API")
     #
-    def initialize(name)
+    def initialize(opts = {})
+      o = {
+        :name => nil,
+        :parent => nil
+      }.merge(opts)
+
+      Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
+      @name = o[:name]
 
       @children = Hash.new
-      Vidalia::checkvar(name,String,self.class.ancestors,"name")
-      @name = name
       @type = Vidalia::Artifact unless @type
-      objectdata = Vidalia::Artifact.get_definition_data(@name,@type)
+
+      if o[:parent]
+        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
+      end
+      @parent_id = o[:parent] # Can be nil
+
+      objectdata = Vidalia::Artifact.get_definition_data(@name,@parent_id)
 
       unless objectdata
         raise "Cannot find definition data for Vidalia::Artifact name \"#{name}\".  Make sure you've defined it first!"
       end
 
+      @id = objectdata[:id]
       block = objectdata[:initialization_block]
       self.instance_eval &block
     end

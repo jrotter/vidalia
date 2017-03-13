@@ -49,7 +49,7 @@ module Vidalia
     #
     #   Vidalia::Element.get_definition_data("Blog Post")
     #
-    def self.get_definition_data(name,type)
+    def self.get_definition_data(name,parent)
       super
     end
 
@@ -62,14 +62,15 @@ module Vidalia
     #
     # *Options*
     #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Element
+    # Takes a hash as input where the current options are:
+    # +name+:: specifies the name of the Interface
+    # +parent+:: specifies the Vidalia::Identifier of the parent object
     #
     # *Example*
     #
     #   blog_post = Vidalia::Element.new("Blog Post")
     #
-    def initialize(name)
+    def initialize(opts = {})
       @type = Vidalia::Element
       super
     end

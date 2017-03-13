@@ -4,9 +4,10 @@ require 'test_helper'
 class ElementTest < Minitest::Test
 
   def test_object_definition_happy_path
-    Vidalia::Element.define(:name => "n") {$var = "dog"} 
-    assert Vidalia::Element.get_definition_data("n",Vidalia::Element)[:name] == "n"
-    assert Vidalia::Element.get_definition_data("n",Vidalia::Element)[:initialization_block].is_a?(Proc)
+    a = Vidalia::Element.define(:name => "n") {$var = "dog"} 
+    assert a.is_a?(Vidalia::Identifier)
+    assert Vidalia::Element.get_definition_data("n",nil)[:name] == "n"
+    assert Vidalia::Element.get_definition_data("n",nil)[:initialization_block].is_a?(Proc)
   end
 
   def test_object_definition_parameter_checking
@@ -19,52 +20,56 @@ class ElementTest < Minitest::Test
   end
 
   def test_object_definition_and_creation_happy_path
-    Vidalia::Element.define(:name => "n") {$var = "dog"} 
+    n = Vidalia::Element.define(:name => "n") {$var = "dog"} 
     $var = "cat"
-    a = Vidalia::Element.new("n")
+    a = Vidalia::Element.new(:name => "n")
     assert $var == "dog"
     assert a.name == "n"
     assert a.is_a?(Vidalia::Element)
+    assert a.id == n
 
-    Vidalia::Element.define(:name => "n") {$var = "N"} 
-    Vidalia::Element.define(:name => "o") {$var = "O"} 
-    Vidalia::Element.define(:name => "p") {$var = "P"} 
+    n = Vidalia::Element.define(:name => "n") {$var = "N"} 
+    o = Vidalia::Element.define(:name => "o") {$var = "O"} 
+    p = Vidalia::Element.define(:name => "p") {$var = "P"} 
     $var = "X"
-    a = Vidalia::Element.new("n")
+    a = Vidalia::Element.new(:name => "n")
     assert $var == "N"
     assert a.name == "n"
     assert a.is_a?(Vidalia::Element)
-    a = Vidalia::Element.new("o")
+    assert a.id == n
+    a = Vidalia::Element.new(:name => "o")
     assert $var == "O"
     assert a.name == "o"
     assert a.is_a?(Vidalia::Element)
-    a = Vidalia::Element.new("p")
+    assert a.id == o
+    a = Vidalia::Element.new(:name => "p")
     assert $var == "P"
     assert a.name == "p"
     assert a.is_a?(Vidalia::Element)
+    assert a.id == p
   end
 
   def test_object_creation_error_checking
     Vidalia::Element.define(:name => "n") {$var = "dog"} 
     assert_raises(RuntimeError) { 
-      Vidalia::Element.new("Undefined Name")
+      Vidalia::Element.new(:name => "Undefined Name")
+    }
+    assert_raises(TypeError) { 
+      Vidalia::Element.new("n")
     }
     assert_raises(RuntimeError) { 
-      Vidalia::Element.new(:name => "n")
+      Vidalia::Element.new(:name => :n)
     }
     assert_raises(RuntimeError) { 
-      Vidalia::Element.new(:n)
-    }
-    assert_raises(RuntimeError) { 
-      Vidalia::Element.new(["not","a","string"])
+      Vidalia::Element.new(:name => ["not","a","string"])
     }
   end
 
   def test_add_element_parent
-    Vidalia::Object.define(:name => "parent") {$var = "p"}
-    Vidalia::Element.define(:name => "child") {$var = "c"}
-    p = Vidalia::Object.new("parent")
-    c = Vidalia::Element.new("child")
+    p_id = Vidalia::Object.define(:name => "parent") {$var = "p"}
+    c_id = Vidalia::Element.define(:name => "child") {$var = "c"}
+    p = Vidalia::Object.new(:name => "parent")
+    c = Vidalia::Element.new(:name => "child")
     assert c.set_parent(p) == p
     assert c.parent == p
   end
@@ -72,8 +77,8 @@ class ElementTest < Minitest::Test
   def test_add_element_parent_validity_checking
     Vidalia::Element.define(:name => "child") {$var = "c"}
     Vidalia::Element.define(:name => "dog") {$var = "d"}
-    c = Vidalia::Element.new("child")
-    d = Vidalia::Element.new("dog")
+    c = Vidalia::Element.new(:name => "child")
+    d = Vidalia::Element.new(:name => "dog")
     assert_raises(RuntimeError) {
       c.set_parent(nil)
     }

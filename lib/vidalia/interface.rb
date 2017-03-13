@@ -1,7 +1,7 @@
 module Vidalia
 
   class Interface < Artifact
- 
+
     attr_reader :name, :parent
 
     # Define an Interface (inherited from Vidalia::Artifact)
@@ -26,6 +26,7 @@ module Vidalia
     #   }
     #
     def self.define(opts = {}, &block)
+      opts[:type] = Vidalia::Interface
       super
     end
 
@@ -41,7 +42,7 @@ module Vidalia
     #
     #   Vidalia::Interface.get_definition_data("Blog API")
     #
-    def self.get_definition_data(name)
+    def self.get_definition_data(name,parent)
       super
     end
 
@@ -54,14 +55,16 @@ module Vidalia
     #
     # *Options*
     #
-    # Takes one parameter:
+    # Takes a hash as input where the current options are:
     # +name+:: specifies the name of the Interface
+    # +parent+:: specifies the Vidalia::Identifier of the parent object
     #
     # *Example*
     #
     #   blog_api = Vidalia::Interface.new("Blog API")
     #
-    def initialize(name)
+    def initialize(opts = {})
+      @type = Vidalia::Interface
       super
     end
 

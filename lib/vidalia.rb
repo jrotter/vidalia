@@ -1,3 +1,4 @@
+require 'vidalia/identifier'
 require 'vidalia/artifact'
 require 'vidalia/interface'
 require 'vidalia/object'
