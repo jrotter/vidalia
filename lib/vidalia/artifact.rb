@@ -62,9 +62,9 @@ module Vidalia
     #
     # *Options*
     #
-    # Takes one parameter:
+    # Takes two parameters:
     # +name+:: a string specifying the name of the Artifact
-    # +parent+:: a fixnum specifying the id of the parent Artifact
+    # +parent+:: a Vidalia::Identifier specifying the id of the parent Artifact's defintion
     #
     # *Example*
     #

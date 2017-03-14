@@ -121,7 +121,7 @@ module Vidalia
     #   my_child = blog_api.object("Blog Post")
     #
     def object(child_name)
-      get_child(child_name)
+      child = Vidalia::Object.new(:name => child_name, :parent => @id)
     end
   
     
