@@ -4,83 +4,6 @@ module Vidalia
  
     attr_reader :name, :parent
 
-    # List of all master Artifact definitions
-    @@definitions = Hash.new
-
-    # Define an Artifact
-    #
-    # This routine saves the specified Artifact parameters to the master list 
-    # of Artifacts.  When a user instantiates a Vidalia::Artifact, it will 
-    # initialize the object with this data and run the specified block of code.
-    #
-    # *Return Value*
-    #
-    # This routine returns a unique ID of the defined Artifact
-    #
-    # *Options*
-    #
-    # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Artifact
-    # +name+:: specifies the type of the Artifact
-    # +block+:: specifies the block of code to be run when the Interface object is initialized
-    #
-    # *Example*
-    #
-    #   Vidalia::Artifact.define(:name => "Blog API") {
-    #     @db_password = ENV['BLOG_DB_PASSWORD']
-    #     @db_userid = ENV['BLOG_DB_PASSWORD']
-    #     @db_ip = ENV['BLOG_DB_IP']
-    #     @db_port = ENV['BLOG_DB_PORT']
-    #   }
-    #
-    #
-    def self.define(opts = {}, &block)
-      o = {
-        :name => nil,
-        :parent => nil
-      }.merge(opts)
-
-      Vidalia::checkvar(o[:name],String,self.class.ancestors,":name")
-      if o[:parent]
-        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
-      end
-
-      objectdata = Hash.new
-      o.each do |key,index|
-        objectdata[key] = index
-      end
-      objectdata[:initialization_block] = block
-      objectdata[:id] = Vidalia::Identifier.new
-
-      @@definitions[o[:parent]] = Hash.new if !@@definitions[o[:parent]]
-      @@definitions[o[:parent]][o[:name]] = objectdata
-      objectdata[:id]
-    end
-
-
-    # Get Vidalia master Artifact data
-    #
-    # *Options*
-    #
-    # Takes two parameters:
-    # +name+:: a string specifying the name of the Artifact
-    # +parent+:: a Vidalia::Identifier specifying the id of the parent Artifact's defintion
-    #
-    # *Example*
-    #
-    #   Vidalia::Artifact.get_definition_data("Blog API")
-    #
-    def self.get_definition_data(name,parent)
-
-      Vidalia::checkvar(name,String,self.class.ancestors,"name")
-      if parent
-        Vidalia::checkvar(parent,Vidalia::Identifier,self.class.ancestors,"parent")
-      end
-
-      @@definitions[parent][name]
-    end
-
-  
     # Create an Artifact
     #
     # Initializes a Vidalia::Artifact using the data set in Vidalia::Artifact.define.  If such data
@@ -97,51 +20,30 @@ module Vidalia
     #
     #   blog_api = Vidalia::Interface.new("Blog API")
     #
-    def initialize(opts = {})
+    def initialize(opts = {},&block)
       o = {
         :name => nil,
-        :parent => nil
+        :parent => nil,
+        :definition => nil
       }.merge(opts)
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
       @name = o[:name]
 
-      @children = Hash.new
       @type = Vidalia::Artifact unless @type
 
+      @parent = o[:parent] # Can be nil
+      @children = []
       if o[:parent]
-        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
-      end
-      @parent_id = o[:parent] # Can be nil
-
-      objectdata = Vidalia::Artifact.get_definition_data(@name,@parent_id)
-
-      unless objectdata
-        raise "Cannot find definition data for Vidalia::Artifact name \"#{name}\".  Make sure you've defined it first!"
+        Vidalia::checkvar(o[:parent],Vidalia::Artifact,self.class.ancestors,"parent")
+        @parent.children << self
       end
 
-      @id = objectdata[:id]
-      block = objectdata[:initialization_block]
-      self.instance_eval &block
+      @init_block = block
+      block.call() unless o[:definition]
     end
 
 
-    # Find an Artifact definition by name
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Artifact to search for
-    #
-    # *Example*
-    #
-    #   blog_api = Vidalia::Artifact.find_definition("Blog API")
-    #
-    def self.find_definition(name)
-      @@interface_definitions[name]
-    end
-
-  
     # Add a child object to this Artifact
     #
     # *Options*

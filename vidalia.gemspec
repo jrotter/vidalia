@@ -8,7 +8,9 @@ Gem::Specification.new do |s|
   s.authors     = ["Jeremy Rotter"]
   s.email       = 'jeremy.rotter@gmail.com'
   s.files       = ['lib/vidalia.rb',
-                   'lib/vidalia/identifier.rb',
+                   'lib/vidalia/element_definition.rb',
+                   'lib/vidalia/interface_definition.rb',
+                   'lib/vidalia/object_definition.rb',
                    'lib/vidalia/artifact.rb',
                    'lib/vidalia/interface.rb',
                    'lib/vidalia/object.rb',

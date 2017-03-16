@@ -6,52 +6,28 @@ module Vidalia
 
     @@methodlist = Hash.new
 
-    # Define an Object (inherited from Vidalia::Artifact)
+    # Define an Object
     #
-    # This routine saves the specified Object parameters to the master list 
-    # of Objects.  When a user instantiates a Vidalia::Object, it will 
-    # initialize the Object with this data and run the specified block of code.
+    # This routine takes a Vidalia::InterfaceDefinition and adds an Object
+    # definition to the associated Interface.
     #
     # *Options*
     #
     # Takes a hash as input where the current options are:
     # +name+:: specifies the name of the Object
-    # +interface+:: specifies the Interface that the Object is associated with
+    # +interface+:: specifies the Vidalia::InterfaceDefinition that the Object is associated with
+    #
     # +block+:: specifies the block of code to be run when the Object is initialized
     #
     # *Example*
     #
-    #   Vidalia::Object.define(:name => "Blog Post",:interface => "Blog API") {
-    #     @data = {
-    #       "subject" => nil,
-    #       "body" => nil,
-    #       "author" => nil,
-    #       "date_posted" => nil
-    #     }
-    #   }
+    #   $$$ Example needed $$$
     #
     def self.define(opts = {}, &block)
-      opts[:type] = Vidalia::Object
-      super
+      Vidalia::ObjectDefinition.new(opts,&block)
     end
 
 
-    # Get Vidalia master Object data
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: a string specifying the name of the Object
-    #
-    # *Example*
-    #
-    #   Vidalia::Object.get_definition_data("Blog Post")
-    #
-    def self.get_definition_data(name,parent)
-      super
-    end
-
-  
     # Create an Object (inherited from Vidalia::Artifact)
     #
     # Initializes a Vidalia::Object using the data set in 
@@ -61,14 +37,20 @@ module Vidalia
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
-    # +parent+:: specifies the Vidalia::Identifier of the parent object
+    # +name+:: specifies the name of the Object
+    # +parent+:: specifies the parent object
     #
     # *Example*
     #
     #   blog_post = Vidalia::Object.new("Blog Post")
     #
     def initialize(opts = {})
+      o = {
+        :name => nil,
+        :parent => nil,
+        :definition => nil
+      }.merge(opts)
+
       @type = Vidalia::Object
       super
     end

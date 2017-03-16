@@ -1,77 +1,55 @@
 module Vidalia
 
-  class Interface < Artifact
+  class InterfaceDefinition
 
-    attr_reader :name, :interface
+    @@interfaces = []
+    attr_reader :name, :parent, :interface
 
-    # Define an Interface
+    # Create an Interface Definition
     #
-    # This routine "stores" the defined Interface attributes in a
-    # Vidalia::InterfaceDefinition.  Any subsequent call to instantiate
-    # an Interface object will copy that object from the InterfaceDefinition.
+    # Under the covers, the InterfaceDefinition will create or find the
+    # associated Interface definition.  Any instantiated Interface will
+    # be copied from this master copy.
     #
     # *Options*
     #
+    # Takes two parameters:
     # Takes a hash as input where the current options are:
-    # +name+:: (required) specifies the name of the interface
-    # +block+:: (optional) specifies a block of code to be run when the interface object is initialized
+    # +name+:: (required) specifies the name of the Interface
+    # Takes a block to be executed at initialization time
     #
     # *Example*
     #
-    #   Vidalia::Interface.define(:name => "Blog API") {
+    #   blog_api = Vidalia::InterfaceDefinition.new("Blog API") {
     #     @db_password = ENV['BLOG_DB_PASSWORD']
     #     @db_userid = ENV['BLOG_DB_PASSWORD']
     #     @db_ip = ENV['BLOG_DB_IP']
     #     @db_port = ENV['BLOG_DB_PORT']
     #   }
     #
-    def self.define(opts = {}, &block)
-      Vidalia::InterfaceDefinition.new(opts,&block)
-    end
-
-
-    # Create an Interface (inherited from Vidalia::Artifact)
-    #
-    # Initializes a Vidalia::Interface using the data set in Vidalia::Interface.define.  If such data
-    # does not exist, this routine will error out.  This ensures that all Interfaces have been
-    # predefined.
-    #
-    # *Options*
-    #
-    # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
-    #
-    # *Example*
-    #
-    #   blog_api = Vidalia::Interface.new("Blog API")
-    #
     def initialize(opts = {}, &block)
       o = {
-        :name => nil,
-        :definition => nil
+        :name => nil
       }.merge(opts)
 
-      @type = Vidalia::Interface 
-      super
+      Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
+
+      found = false
+      @@interfaces.each do |i|
+        if i.name == o[:name]
+          @interface = i
+        end
+      end
+
+      # It's OK to "define" an Interface that has already been defined
+      unless @interface
+        opts[:definition] = true
+        @interface = Vidalia::Interface.new(opts,&block)
+        @@interfaces << @interface
+      end
     end
 
 
-    # Find an Interface definition by name (inherited from Vidalia::Artifact)
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Interface to search for
-    #
-    # *Example*
-    #
-    #   blog_api = Vidalia::Interface.find_definition("Blog API")
-    #
-    def self.find_definition(name)
-      super
-    end
-
-  
     # Add a child Object to this Interface (inherited from Vidalia::Artifact)
     #
     # *Options*

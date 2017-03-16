@@ -4,7 +4,7 @@ require 'vidalia'
 # Define the interface.  Under the covers, Vidalia will only define the
 # interface if it hasn't been defined already.
 ###############################################################################
-i_tok = Vidalia::Interface.define(:name => "Application DB")
+app_db = Vidalia::Interface.define(:name => "Application DB")
 
 
 ###############################################################################
@@ -14,7 +14,7 @@ i_tok = Vidalia::Interface.define(:name => "Application DB")
 # objects.  The object definition itself should simply define initial values 
 # for the data elements within this object.
 ###############################################################################
-o_tok = Vidalia::Object.define(:name => "User", :parent => i_tok) {
+user_object = Vidalia::Object.define(:name => "User", :parent => app_db) {
   @id = nil
   @first_name = nil
   @last_name = nil
@@ -26,7 +26,7 @@ o_tok = Vidalia::Object.define(:name => "User", :parent => i_tok) {
 # 
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
-Vidalia::Object.add_method(:name => "create", :token => o_tok) {
+user_object.add_method(:name => "create") {
   db = SQLite3::Database.open "users.db"
   sql_string = "INSERT INTO Users VALUES("
   sql_string << @id.to_s
@@ -46,7 +46,7 @@ Vidalia::Object.add_method(:name => "create", :token => o_tok) {
 #
 # Vidalia will expect all elements to be read AFTER this method is invoked
 ###############################################################################
-Vidalia::Object.add_method(:name => "read", :token => o_tok) {
+user_object.add_method(:name => "read") {
   db = SQLite3::Database.open "users.db"
   sql_string = "SELECT * FROM Users WHERE id = #{@id};"
   results = db.execute sql_string
@@ -63,7 +63,7 @@ Vidalia::Object.add_method(:name => "read", :token => o_tok) {
 #
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
-Vidalia::Object.add_method(:name => "update", :token => o_tok) {
+user_object.add_method(:name => "update") {
 }
 
 ###############################################################################
@@ -71,44 +71,43 @@ Vidalia::Object.add_method(:name => "update", :token => o_tok) {
 #
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
-Vidalia::Object.add_method(:name => "delete", :token => o_tok) {
+user_object.add_method(:name => "delete") {
 }
 
 
-e_tok = Vidalia::Element.define(:name => "ID", :parent => obj) 
-Vidalia::Element.add_get(:token => e_tok) { |opts|
-  @id
+id_element = Vidalia::Element.define(:name => "ID", :parent => user_object) 
+id_element.add_get { |opts|
+  @parent.id
 }
-Vidalia::Element.add_set(:token => e_tok) { |value|
-  @id = value
-}
-
-
-t = Vidalia::Element.define(:name => "First Name", :parent => obj)
-Vidalia::Element.add_get(:token => e_tok) { |opts|
-  @first_name
-}
-Vidalia::Element.add_set(:token => e_tok) { |value|
-  @first_name = value
+id_element.add_set { |value|
+  @parent.id = value
 }
 
 
-e_tok = Vidalia::Element.define(:name => "Last Name", :parent => obj) 
-Vidalia::Element.add_get(:token => e_tok) { |opts|
-  @last_name
+first_name_element = Vidalia::Element.define(:name => "First Name", :parent => user_object) 
+first_name_element.add_get { |opts|
+  @parent.first_name
 }
-Vidalia::Element.add_set(:token => e_tok) { |value|
-  @last_name = value
+first_name_element.add_set { |value|
+  @parent.first_name = value
+}
+
+
+last_name_element = Vidalia::Element.define(:name => "Last Name", :parent => user_object) 
+last_name_element.add_get { |opts|
+  @parent.last_name
+}
+last_name_element.add_set { |value|
+  @parent.last_name = value
 }
 
 
-e_tok = Vidalia::Element.define(:name => "Username", :parent => obj) 
-Vidalia::Element.add_get(:token => e_tok) { |opts|
-  @username
+username_element = Vidalia::Element.define(:name => "Username", :parent => user_object) 
+username_element.add_get { |opts|
+  @parent.username
 }
-Vidalia::Element.add_set(:token => e_tok) { |value|
-  @username = value
+username_element.add_set { |value|
+  @parent.username = value
 }
-
 
 
