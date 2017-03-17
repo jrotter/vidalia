@@ -34,61 +34,35 @@ module Vidalia
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
 
-      found = false
-      @@interfaces.each do |i|
-        if i.name == o[:name]
-          @interface = i
-        end
-      end
-
       # It's OK to "define" an Interface that has already been defined
-      unless @interface
-        opts[:definition] = true
+      unless Vidalia::InterfaceDefinition.find(o[:name])
         @interface = Vidalia::Interface.new(opts,&block)
         @@interfaces << @interface
       end
     end
 
 
-    # Add a child Object to this Interface (inherited from Vidalia::Artifact)
+    # Find an Interface by name
     #
     # *Options*
     #
-    # This method takes one parameter:
-    # +object+:: specifies a Vidalia::Object to be added as a child
+    # Takes one parameter:
+    # +name+:: (required) specifies the name of the Interface
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Interfaces must be predefined
-    #   blog_api = Vidalia::Interface.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_api.add_object(blog_post)
+    #   $$$ Example needed $$$
     #
-    def add_object(object)
-      Vidalia::checkvar(object,Vidalia::Object,self.class.ancestors,"child object")
-      add_child(object)
+    def self.find(name)
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      interface = nil
+      @@interfaces.each do |i|
+        if i.name == name
+          interface = i
+        end
+      end
+      interface
     end
-
-
-    # Retrieve a child Object of this Interface by name
-    #
-    # *Options*
-    #
-    # This method takes one parameter:
-    # +child_name+:: specifies the name of the child Object
-    #
-    # *Example*
-    #
-    #   # Note that both the "Blog API" and "Blog Post" Interfaces must be predefined
-    #   blog_api = Vidalia::Interface.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_api.add_object(blog_post)
-    #   my_child = blog_api.object("Blog Post")
-    #
-    def object(child_name)
-      child = Vidalia::Object.new(:name => child_name, :parent => @id)
-    end
-  
     
   end
 

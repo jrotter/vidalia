@@ -15,8 +15,8 @@ class ElementTest < Minitest::Test
     e = Vidalia::Element.define(:name => "e", :parent => o) {$var = "E"} 
     assert e.is_a?(Vidalia::ElementDefinition)
     assert e.element.is_a?(Vidalia::Element)
-    assert o.object.children.size == 1
-    assert o.object.children.first == e.element
+    assert o.object.number_of_children == 1
+    assert o.object.get_child("e") == e.element
     assert $var == "X"
   end
 

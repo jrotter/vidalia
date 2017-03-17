@@ -56,62 +56,51 @@ module Vidalia
     end
 
 
-    # Find an Interface definition by name (inherited from Vidalia::Artifact)
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Interface to search for
-    #
-    # *Example*
-    #
-    #   blog_api = Vidalia::Interface.find_definition("Blog API")
-    #
-    def self.find_definition(name)
-      super
-    end
-
-  
-    # Add a child Object to this Interface (inherited from Vidalia::Artifact)
-    #
-    # *Options*
-    #
-    # This method takes one parameter:
-    # +object+:: specifies a Vidalia::Object to be added as a child
-    #
-    # *Example*
-    #
-    #   # Note that both the "Blog API" and "Blog Post" Interfaces must be predefined
-    #   blog_api = Vidalia::Interface.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_api.add_object(blog_post)
-    #
-    def add_object(object)
-      Vidalia::checkvar(object,Vidalia::Object,self.class.ancestors,"child object")
-      add_child(object)
-    end
-
-
     # Retrieve a child Object of this Interface by name
     #
     # *Options*
     #
     # This method takes one parameter:
-    # +child_name+:: specifies the name of the child Object
+    # +name+:: specifies the name of the child Object
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Interfaces must be predefined
-    #   blog_api = Vidalia::Interface.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_api.add_object(blog_post)
-    #   my_child = blog_api.object("Blog Post")
+    #   $$$ Example needed $$$
     #
-    def object(child_name)
-      child = Vidalia::Object.new(:name => child_name, :parent => @id)
+    def object(name)
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      child = get_child(name)
+      unless child
+        # Child does not yet exist.  Create it.
+        child = Vidalia::Object.new(
+          :name => name,
+          :parent => self,
+          :definition => @source_artifact.get_child(name)
+        )
+      end
+      child
     end
   
     
+    # Get an Interface object by name
+    #
+    # *Options*
+    #
+    # This method takes one parameter:
+    # +name+:: (required) specifies the name of the Interface
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def self.get(name)
+      return Vidalia::Interface.new(
+        :name => name,
+        :definition => Vidalia::InterfaceDefinition.find(name)
+      )
+    end
+
+
   end
 
 end

@@ -2,7 +2,7 @@ module Vidalia
 
   class Artifact
  
-    attr_reader :name, :parent
+    attr_reader :name, :parent, :init_block
 
     # Create an Artifact
     #
@@ -13,12 +13,13 @@ module Vidalia
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
-    # +parent+:: specifies the Vidalia::Identifier of the parent object
+    # +name+:: (required) specifies the name of the Interface
+    # +parent+:: (required) specifies the Vidalia::Identifier of the parent object
+    # +definition+:: (optional) specifies the Vidalia::Artifact contained by the artifact's definition
     #
     # *Example*
     #
-    #   blog_api = Vidalia::Interface.new("Blog API")
+    #   $$$ Example needed $$$
     #
     def initialize(opts = {},&block)
       o = {
@@ -29,21 +30,58 @@ module Vidalia
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
       @name = o[:name]
-
       @type = Vidalia::Artifact unless @type
+      @children = Hash.new
 
-      @parent = o[:parent] # Can be nil
-      @children = []
       if o[:parent]
+        # Add myself as a child of my parent
         Vidalia::checkvar(o[:parent],Vidalia::Artifact,self.class.ancestors,"parent")
-        @parent.children << self
+        @parent = o[:parent]
+        @parent.add_child(self)
+      else
+        # Just kidding.  I'm an orphan.  :(
+        @parent = nil
       end
 
-      @init_block = block
-      block.call() unless o[:definition]
+      @source_artifact = o[:definition]
+
+      if @source_artifact
+        # If this is an instantiation of a definition
+
+        Vidalia::checkvar(@source_artifact,Vidalia::Artifact,self.class.ancestors,"definition")
+
+        # Copy the initialization block and run it
+        @init_block = @source_artifact.init_block
+        @init_block.call()
+      else
+        # If this is only a definition
+
+        # Store the initialization block
+        @init_block = block
+      end
     end
 
 
+    # Copy an Artifact from another Artifact
+    #
+    # *Options*
+    #
+    # Takes one parameter:
+    # +source+:: specifies the name of the Interface to copy from
+    #
+    # *Example*
+    #
+    #   $$$ Example Needed $$$
+    #
+    def self.copy_from(source)
+      Vidalia::checkvar(source,Vidalia::Artifact,self.class.ancestors,"source")
+      @name = source.type
+      @type = source.type
+      @init_block = source.init_block
+      super
+    end
+
+  
     # Add a child object to this Artifact
     #
     # *Options*
@@ -61,7 +99,7 @@ module Vidalia
     def add_child(object)
       Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
       @children[object.name] = object
-      object
+      object.set_parent(self)
     end
 
 
@@ -74,11 +112,7 @@ module Vidalia
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
-    #   blog_api = Vidalia::Artifact.new("Blog API")
-    #   blog_post = Vidalia::Artifact.new("Blog Post")
-    #   blog_api.add_child(blog_post)
-    #   my_child = blog_api.get_child("Blog Post")
+    #   $$$ Example needed $$$
     #
     def get_child(name)
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
@@ -86,24 +120,34 @@ module Vidalia
     end
 
 
-    # Set the parent object of this Artifact
+    # Get a the number of children of this Artifact
     #
     # *Options*
     #
-    # This method takes one parameter
-    # +object+:: specifies a Vidalia::Artifact object to be set as the parent
+    # This method takes no parameters.
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
-    #   blog_api = Vidalia::Artifact.new("Blog API")
-    #   blog_post = Vidalia::Artifact.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
-    # 
-    def set_parent(object)
-      Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
-      @parent = object
-      object
+    #   $$$ Example needed $$$
+    #
+    def number_of_children
+      @children.size
+    end
+  
+    
+    # Set the parent of this Artifact
+    #
+    # *Options*
+    #
+    # This method takes one parameter:
+    # +parent+: specifies the parent object of this Artifact
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def set_parent(parent)
+      @parent = parent
     end
   
     

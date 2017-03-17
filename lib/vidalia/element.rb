@@ -54,42 +54,22 @@ module Vidalia
     end
 
 
-    # Find an Element definition by name (inherited from Vidalia::Artifact)
+    # Copy an Interface from another Interface (inherited from Vidalia::Artifact)
     #
     # *Options*
     #
     # Takes one parameter:
-    # +name+:: specifies the name of the Element to search for
+    # +source+:: specifies the name of the Interface to copy from
     #
     # *Example*
     #
-    #   blog_post = Vidalia::Element.find_definition("Blog Post")
+    #   $$$ Example Needed $$$
     #
-    def self.find_definition(name)
+    def self.copy_from(source)
       super
     end
 
   
-    # Set the parent Object of this Element
-    #
-    # *Options*
-    #
-    # This method takes one parameter
-    # +object+:: specifies a Vidalia::Object to be set as the parent
-    #
-    # *Example*
-    #
-    #   # Note that both the "Blog API" and "Blog Post" Elements must be predefined
-    #   blog_api = Vidalia::Element.new("Blog API")
-    #   blog_post = Vidalia::Element.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
-    # 
-    def set_parent(object)
-      Vidalia::checkvar(object,Vidalia::Object,self.class.ancestors,"parent object")
-      super
-    end
-  
-    
   end
 
 end

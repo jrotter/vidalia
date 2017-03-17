@@ -32,10 +32,8 @@ module Vidalia
       Vidalia::checkvar(o[:parent],Vidalia::ObjectDefinition,self.class.ancestors,"parent")
 
       o[:parent] = o[:parent].object
-      o[:definition] = true
       @element = Vidalia::Element.new(o,&block)
     end
-
 
   end
 

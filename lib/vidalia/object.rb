@@ -56,81 +56,32 @@ module Vidalia
     end
 
 
-    # Find an Object definition by name (inherited from Vidalia::Artifact)
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Object to search for
-    #
-    # *Example*
-    #
-    #   blog_post = Vidalia::Object.find_definition("Blog Post")
-    #
-    def self.find_definition(name)
-      super
-    end
-
-  
-    # Add a child Element to this Object
+    # Retrieve a child Element of this Object by name
     #
     # *Options*
     #
     # This method takes one parameter:
-    # +element+:: specifies a Vidalia::Element to be added as a child
+    # +name+:: specifies the name of the child Element
     #
     # *Example*
     #
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   subject = Vidalia::Element.new("Subject")
-    #   blog_post.add_element(subject)
-    #
-    def add_element(element)
-      Vidalia::checkvar(element,Vidalia::Element,self.class.ancestors,"child element")
-      add_child(element)
-    end
-
-
-    # Get a child Element from this Object
-    #
-    # *Options*
-    #
-    # This method takes one parameter:
-    # +name+:: specifies the name of a Vidalia::Element that is a child of this Object
-    #
-    # *Example*
-    #
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   subject = Vidalia::Element.new("Subject")
-    #   blog_post.add_element(subject)
-    #   my_child = blog_post.element("Subject")
+    #   $$$ Example needed $$$
     #
     def element(name)
-      Vidalia::checkvar(name,String,self.class.ancestors,"element name")
-      get_child(name)
-    end
-
-
-    # Set the parent Interface of this Object
-    #
-    # *Options*
-    #
-    # This method takes one parameter
-    # +interface+:: specifies a Vidalia::Interface to be set as the parent
-    #
-    # *Example*
-    #
-    #   # Note that both the "Blog API" and "Blog Post" Objects must be predefined
-    #   blog_api = Vidalia::Object.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
-    # 
-    def set_parent(interface)
-      Vidalia::checkvar(interface,Vidalia::Interface,self.class.ancestors,"parent interface")
-      super
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      child = get_child(name)
+      unless child
+        # Child does not yet exist.  Create it.
+        child = Vidalia::Element.new(
+          :name => name,
+          :parent => self,
+          :definition => @source_artifact.get_child(name)
+        )
+      end
+      child
     end
   
-
+    
     # Define a method to act on a given Object
     #
     # *Options*
