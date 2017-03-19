@@ -36,6 +36,7 @@ class InterfaceTest < Minitest::Test
     assert int.is_a?(Vidalia::Interface)
     assert $var == "I"
     assert int.name == "i"
+    assert int != i
     assert int.parent == nil
     assert int.number_of_children == 0
 
@@ -43,6 +44,7 @@ class InterfaceTest < Minitest::Test
     assert obj1.is_a?(Vidalia::Object)
     assert $var == "O1"
     assert obj1.name == "o1"
+    assert obj1 != o1
     assert obj1.parent == int
     assert int.number_of_children == 1
     assert obj1.number_of_children == 0
@@ -51,6 +53,7 @@ class InterfaceTest < Minitest::Test
     assert obj2.is_a?(Vidalia::Object)
     assert $var == "O2"
     assert obj2.name == "o2"
+    assert obj2 != o2
     assert obj2.parent == int
     assert int.number_of_children == 2
     assert obj2.number_of_children == 0
@@ -59,6 +62,7 @@ class InterfaceTest < Minitest::Test
     assert obj3.is_a?(Vidalia::Object)
     assert $var == "O3"
     assert obj3.name == "o3"
+    assert obj3 != o3
     assert obj3.parent == int
     assert int.number_of_children == 3
     assert obj3.number_of_children == 0
