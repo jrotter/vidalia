@@ -109,8 +109,8 @@ module Vidalia
     #
     #   $$$ Example needed $$$
     #
-    def get(inhash = {})
-      @get_function.call(inhash)
+    def get(inparams = {})
+      @get_function.call(inparams)
     end
 
 
@@ -147,8 +147,8 @@ module Vidalia
     #
     #   $$$ Example needed $$$
     #
-    def set(inhash = {})
-      @set_function.call(inhash)
+    def set(inparams = {})
+      @set_function.call(inparams)
     end
 
 

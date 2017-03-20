@@ -52,6 +52,9 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def add_get(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_get block must take a single parameter"
+      end
       @element.add_get &block
     end
 
@@ -72,6 +75,9 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def add_set(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_set block must take a single parameter"
+      end
       @element.add_set &block
     end
 
