@@ -26,4 +26,33 @@ class ElementTest < Minitest::Test
     }
   end
 
+  def test_element_get
+    $var = "X"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    e = Vidalia::Element.define(:name => "e", :parent => o) {$var = "E"} 
+    e.add_get { |inhash| $var }
+
+    int = Vidalia::Interface.get("i")
+    obj = int.object("o")
+    ele = obj.element("e")
+    $var = "X"
+    assert ele.get() == "X"
+  end
+
+  def test_element_set
+    $var = "X"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    e = Vidalia::Element.define(:name => "e", :parent => o) {$var = "E"} 
+    e.add_set { |inhash| $var = inhash[:value] }
+
+    int = Vidalia::Interface.get("i")
+    obj = int.object("o")
+    ele = obj.element("e")
+    $var = "X"
+    ele.set(:value => "test")
+    assert $var == "test"
+  end
+
 end

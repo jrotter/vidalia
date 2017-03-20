@@ -35,6 +35,46 @@ module Vidalia
       @element = Vidalia::Element.new(o,&block)
     end
 
+
+    # Add a "get" function for a Defined Element
+    #
+    # This function will be called to obtain the data element value from the
+    # Object.  A call to "get" really makes the most sense AFTER obtaining
+    # data from the database/API.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "get" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_get(&block)
+      @element.add_get &block
+    end
+
+
+    # Add a "set" function for a Defined Element
+    #
+    # This function will be called to set the element's value in the Object.
+    # Object.  A call to "set" really makes the most sense BEFORE making an
+    # alteration to the Object data via database/API call.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "set" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_set(&block)
+      @element.add_set &block
+    end
+
   end
 
 end
