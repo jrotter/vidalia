@@ -3,146 +3,116 @@ require 'test_helper'
 
 class ObjectTest < Minitest::Test
 
-  def test_interface_definition_happy_path
-    a = Vidalia::Object.define(:name => "n") {$var = "dog"} 
-    assert a.is_a?(Vidalia::Identifier)
-    assert Vidalia::Object.get_definition_data("n",nil)[:name] == "n"
-    assert Vidalia::Object.get_definition_data("n",nil)[:initialization_block].is_a?(Proc)
-  end
-
-  def test_interface_definition_parameter_checking
-    assert_raises(RuntimeError) { 
-      Vidalia::Object.define(:name => 2) {|var| var = "dog"}
-    }
-    assert_raises(RuntimeError) { 
-      Vidalia::Object.define() {|var| var = "dog"}
+  def setup
+    # Clean up the Interface Definitions
+    Vidalia::InterfaceDefinition.reset
+    Vidalia::set_logroutine { |logstring|
+      logstring #No need to print anything out here
     }
   end
 
-  def test_interface_definition_and_creation_happy_path
-    n = Vidalia::Object.define(:name => "n") {$var = "dog"} 
-    $var = "cat"
-    a = Vidalia::Object.new(:name => "n")
-    assert $var == "dog"
-    assert a.name == "n"
-    assert a.is_a?(Vidalia::Object)
-    assert a.id == n
-
-    n = Vidalia::Object.define(:name => "n") {$var = "N"} 
-    o = Vidalia::Object.define(:name => "o") {$var = "O"} 
-    p = Vidalia::Object.define(:name => "p") {$var = "P"} 
+  def test_object_definition_happy_path
     $var = "X"
-    a = Vidalia::Object.new(:name => "n")
-    assert $var == "N"
-    assert a.name == "n"
-    assert a.is_a?(Vidalia::Object)
-    assert a.id == n
-    a = Vidalia::Object.new(:name => "o")
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    assert o.is_a?(Vidalia::ObjectDefinition)
+    assert o.object.is_a?(Vidalia::Object)
+    assert i.interface.number_of_children == 1
+    assert i.interface.get_child("o") == o.object
+    assert $var == "X"
+  end
+
+  def test_object_definition_parameter_checking
+    assert_raises(RuntimeError) { 
+      raise "hello"
+    }
+  end
+
+  def test_object_child_creation
+    $var = "a"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
+    e2 = Vidalia::Element.define(:name => "e2", :parent => o) {$var = "E2"} 
+    e3 = Vidalia::Element.define(:name => "e3", :parent => o) {$var = "E3"} 
+
+    int = Vidalia::Interface.get("i")
+    assert int.is_a?(Vidalia::Interface)
+    assert $var == "I"
+    assert int.name == "i"
+    assert int != i
+    assert int.parent == nil
+    assert int.number_of_children == 0
+
+    obj = int.object("o")
+    assert obj.is_a?(Vidalia::Object)
     assert $var == "O"
-    assert a.name == "o"
-    assert a.is_a?(Vidalia::Object)
-    assert a.id == o
-    a = Vidalia::Object.new(:name => "p")
-    assert $var == "P"
-    assert a.name == "p"
-    assert a.is_a?(Vidalia::Object)
-    assert a.id == p
+    assert obj.name == "o"
+    assert obj != o
+    assert obj.parent == int
+    assert int.number_of_children == 1
+    assert obj.number_of_children == 0
+
+    ele1 = obj.element("e1")
+    assert ele1.is_a?(Vidalia::Element)
+    assert $var == "E1"
+    assert ele1.name == "e1"
+    assert ele1 != e1
+    assert ele1.parent == obj
+    assert int.number_of_children == 1
+    assert obj.number_of_children == 1
+    assert ele1.number_of_children == 0
+
+    ele2 = obj.element("e2")
+    assert ele2.is_a?(Vidalia::Element)
+    assert $var == "E2"
+    assert ele2.name == "e2"
+    assert ele2 != e2
+    assert ele2.parent == obj
+    assert int.number_of_children == 1
+    assert obj.number_of_children == 2
+    assert ele2.number_of_children == 0
+
+    ele3 = obj.element("e3")
+    assert ele3.is_a?(Vidalia::Element)
+    assert $var == "E3"
+    assert ele3.name == "e3"
+    assert ele3 != e3
+    assert ele3.parent == obj
+    assert int.number_of_children == 1
+    assert obj.number_of_children == 3
+    assert ele3.number_of_children == 0
   end
 
-  def test_interface_creation_error_checking
-    Vidalia::Object.define(:name => "n") {$var = "dog"} 
+  def test_object_add_method
+    $var = "a"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o1 = Vidalia::Object.define(:name => "o1", :parent => i) {$var = "O1"} 
+    o1.add_method(:name => "dog") { $var = "dog" }
+    o1.add_method(:name => "cat") { $var = "cat" }
+    o2 = Vidalia::Object.define(:name => "o2", :parent => i) {$var = "O2"} 
+    o2.add_method(:name => "bat") { $var = "bat" }
+    int = Vidalia::Interface.get("i")
+    obj1 = int.object("o1")
+    obj2 = int.object("o2")
+    assert $var == "O2"
+    obj1.dog()
+    assert $var == "dog"
+    obj1.cat()
+    assert $var == "cat"
     assert_raises(RuntimeError) { 
-      Vidalia::Object.new(:name => "Undefined Name")
+      obj1.bat()
     }
-    assert_raises(TypeError) { 
-      Vidalia::Object.new("n")
-    }
+    assert $var == "cat"
+    obj2.bat()
+    assert $var == "bat"
     assert_raises(RuntimeError) { 
-      Vidalia::Object.new(:name => :n)
-    }
-    assert_raises(RuntimeError) { 
-      Vidalia::Object.new(:name => ["not","a","string"])
-    }
-  end
-
-  def test_add_and_get_element
-    p_id = Vidalia::Object.define(:name => "par") {$var = "p"} 
-    c1_id = Vidalia::Element.define(:name => "c1", :interface_name => "par") {$var = "1"} 
-    c2_id = Vidalia::Element.define(:name => "c2", :interface_name => "par") {$var = "2"} 
-    c3_id = Vidalia::Element.define(:name => "c3", :interface_name => "par") {$var = "3"} 
-    p = Vidalia::Object.new(:name => "par")
-    c1 = Vidalia::Element.new(:name => "c1")
-    c2 = Vidalia::Element.new(:name => "c2")
-    c3 = Vidalia::Element.new(:name => "c3")
-    assert p.add_element(c1) == c1
-    assert p.element("c1") == c1
-    assert p.element("none") == nil
-    assert p.add_element(c2) == c2
-    assert p.element("c1") == c1
-    assert p.element("c2") == c2
-    assert p.element("none") == nil
-    assert p.add_element(c3) == c3
-    assert p.element("c1") == c1
-    assert p.element("c2") == c2
-    assert p.element("c3") == c3
-    assert p.element("none") == nil
-  end
-
-  def test_add_element_validity_checking
-    Vidalia::Object.define(:name => "par") {$var = "p"} 
-    Vidalia::Object.define(:name => "other") {$var = "p"} 
-    Vidalia::Element.define(:name => "chi",:interface_name => "par") {$var = "c"} 
-    p = Vidalia::Object.new(:name => "par")
-    c = Vidalia::Element.new(:name => "chi")
-    o = Vidalia::Object.new(:name => "other")
-    assert_raises(RuntimeError) { 
-      p.add_element(2)
+      obj2.cat()
     }
     assert_raises(RuntimeError) { 
-      p.add_element("child")
+      obj2.dog()
     }
-    assert_raises(RuntimeError) { 
-      p.add_element(o)
-    }
-  end
-
-  def test_element_validity_checking
-    p_id = Vidalia::Object.define(:name => "par") {$var = "p"} 
-    c_id = Vidalia::Element.define(:name => "chi",:parent => p_id) {$var = "c"} 
-    p = Vidalia::Object.new(:name => "par")
-    c = Vidalia::Element.new(:name => "chi", :parent => p_id)
-    assert p.add_element(c) == c
-    assert_raises(RuntimeError) { 
-      p.element(:chi)
-    }
-    assert_raises(RuntimeError) { 
-      p.element(c)
-    }
-  end
-
-  def test_add_object_parent
-    p_id = Vidalia::Interface.define(:name => "parent") {$var = "p"}
-    c_id = Vidalia::Object.define(:name => "child", :parent => p_id) {$var = "c"}
-    p = Vidalia::Interface.new(:name => "parent")
-    c = Vidalia::Object.new(:name => "child", :parent => p_id)
-    assert c.set_parent(p) == p
-    assert c.parent == p
-  end
-
-  def test_add_object_parent_validity_checking
-    c_id = Vidalia::Object.define(:name => "child") {$var = "c"}
-    d_id = Vidalia::Object.define(:name => "dog") {$var = "d"}
-    c = Vidalia::Object.new(:name => "child")
-    d = Vidalia::Object.new(:name => "dog")
-    assert_raises(RuntimeError) {
-      c.set_parent(nil)
-    }
-    assert_raises(RuntimeError) {
-      c.set_parent("child")
-    }
-    assert_raises(RuntimeError) {
-      c.set_parent(d)
-    }
+    assert $var == "bat"
   end
 
 end

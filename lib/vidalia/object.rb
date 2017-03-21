@@ -2,56 +2,32 @@ module Vidalia
 
   class Object < Artifact
  
-    attr_reader :name, :parent
+    attr_reader :name, :parent, :added_methods
 
     @@methodlist = Hash.new
 
-    # Define an Object (inherited from Vidalia::Artifact)
+    # Define an Object
     #
-    # This routine saves the specified Object parameters to the master list 
-    # of Objects.  When a user instantiates a Vidalia::Object, it will 
-    # initialize the Object with this data and run the specified block of code.
+    # This routine takes a Vidalia::InterfaceDefinition and adds an Object
+    # definition to the associated Interface.
     #
     # *Options*
     #
     # Takes a hash as input where the current options are:
     # +name+:: specifies the name of the Object
-    # +interface+:: specifies the Interface that the Object is associated with
+    # +interface+:: specifies the Vidalia::InterfaceDefinition that the Object is associated with
+    #
     # +block+:: specifies the block of code to be run when the Object is initialized
     #
     # *Example*
     #
-    #   Vidalia::Object.define(:name => "Blog Post",:interface => "Blog API") {
-    #     @data = {
-    #       "subject" => nil,
-    #       "body" => nil,
-    #       "author" => nil,
-    #       "date_posted" => nil
-    #     }
-    #   }
+    #   $$$ Example needed $$$
     #
     def self.define(opts = {}, &block)
-      opts[:type] = Vidalia::Object
-      super
+      Vidalia::ObjectDefinition.new(opts,&block)
     end
 
 
-    # Get Vidalia master Object data
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: a string specifying the name of the Object
-    #
-    # *Example*
-    #
-    #   Vidalia::Object.get_definition_data("Blog Post")
-    #
-    def self.get_definition_data(name,parent)
-      super
-    end
-
-  
     # Create an Object (inherited from Vidalia::Artifact)
     #
     # Initializes a Vidalia::Object using the data set in 
@@ -61,94 +37,59 @@ module Vidalia
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
-    # +parent+:: specifies the Vidalia::Identifier of the parent object
+    # +name+:: specifies the name of the Object
+    # +parent+:: specifies the parent object
     #
     # *Example*
     #
-    #   blog_post = Vidalia::Object.new("Blog Post")
+    #   $$$ Example needed $$$
     #
     def initialize(opts = {})
+      o = {
+        :name => nil,
+        :parent => nil,
+        :definition => nil
+      }.merge(opts)
+
       @type = Vidalia::Object
       super
+      @added_methods = Hash.new
+      if o[:definition]
+        my_def = o[:definition]
+        Vidalia::checkvar(my_def,Vidalia::Object,self.class.ancestors,"definition")
+        my_def.added_methods.each do |method_name,block|
+          @added_methods[method_name] = block
+        end
+      end
     end
 
 
-    # Find an Object definition by name (inherited from Vidalia::Artifact)
-    #
-    # *Options*
-    #
-    # Takes one parameter:
-    # +name+:: specifies the name of the Object to search for
-    #
-    # *Example*
-    #
-    #   blog_post = Vidalia::Object.find_definition("Blog Post")
-    #
-    def self.find_definition(name)
-      super
-    end
-
-  
-    # Add a child Element to this Object
+    # Retrieve a child Element of this Object by name
     #
     # *Options*
     #
     # This method takes one parameter:
-    # +element+:: specifies a Vidalia::Element to be added as a child
+    # +name+:: specifies the name of the child Element
     #
     # *Example*
     #
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   subject = Vidalia::Element.new("Subject")
-    #   blog_post.add_element(subject)
-    #
-    def add_element(element)
-      Vidalia::checkvar(element,Vidalia::Element,self.class.ancestors,"child element")
-      add_child(element)
-    end
-
-
-    # Get a child Element from this Object
-    #
-    # *Options*
-    #
-    # This method takes one parameter:
-    # +name+:: specifies the name of a Vidalia::Element that is a child of this Object
-    #
-    # *Example*
-    #
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   subject = Vidalia::Element.new("Subject")
-    #   blog_post.add_element(subject)
-    #   my_child = blog_post.element("Subject")
+    #   $$$ Example needed $$$
     #
     def element(name)
-      Vidalia::checkvar(name,String,self.class.ancestors,"element name")
-      get_child(name)
-    end
-
-
-    # Set the parent Interface of this Object
-    #
-    # *Options*
-    #
-    # This method takes one parameter
-    # +interface+:: specifies a Vidalia::Interface to be set as the parent
-    #
-    # *Example*
-    #
-    #   # Note that both the "Blog API" and "Blog Post" Objects must be predefined
-    #   blog_api = Vidalia::Object.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
-    # 
-    def set_parent(interface)
-      Vidalia::checkvar(interface,Vidalia::Interface,self.class.ancestors,"parent interface")
-      super
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      child = get_child(name)
+      unless child
+        # Child does not yet exist.  Create it.
+        child = Vidalia::Element.new(
+          :name => name,
+          :parent => self,
+          :definition => @source_artifact.get_child(name)
+        )
+      end
+      child
     end
   
-
+    
     # Define a method to act on a given Object
     #
     # *Options*
@@ -159,21 +100,14 @@ module Vidalia
     #
     # *Example*
     #
-    #   
+    #   $$$ Example needed $$$
     # 
-    def self.add_method(opts = {},&block)
+    def add_method(opts = {},&block)
       o = {
-        :name => nil,
-        :token => nil
+        :name => nil
       }.merge(opts)
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
-      Vidalia::checkvar(o[:token],Vidalia::Identifier,self.class.ancestors,"name")
-      @@methodlist[o[:name]] = [] unless @@methodlist[o[:name]]
-      method_data = Hash.new
-      method_data["name"] = o[:name]
-      method_data["token"] = o[:token]
-      method_data["block"] = block
-      @@methodlist[o[:token]] << method_data
+      @added_methods[o[:name]] = block
     end
    
  
@@ -183,22 +117,20 @@ module Vidalia
     #
     # Takes a hash as input where the current options are:
     # +name+:: specifies the name of the method
-    # +token+:: specifies the Vidalia::ArtifactToken of the Object
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Objects must be predefined
-    #   blog_api = Vidalia::Object.new("Blog API")
-    #   blog_post = Vidalia::Object.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
+    #   $$$ Example needed $$$
     # 
-    def self.define_method_for_object(opts = {},&block)
-      o = {
-        :name => nil
-      }.merge(opts)
-      Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
-      block = o[:block]
-      define_method o[:name], &block
+    def self.define_method_for_object_class(name)
+      Vidalia::checkvar(name,String,self.class.ancestors,"name")
+      define_method name.to_sym do |opts = {}|
+        if @added_methods[name]
+          @added_methods[name].call(opts)
+        else
+          raise "Tried to call an Object method that doesn't exist."
+        end
+      end
     end
     
   end

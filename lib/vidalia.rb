@@ -1,4 +1,6 @@
-require 'vidalia/identifier'
+require 'vidalia/interface_definition'
+require 'vidalia/object_definition'
+require 'vidalia/element_definition'
 require 'vidalia/artifact'
 require 'vidalia/interface'
 require 'vidalia/object'

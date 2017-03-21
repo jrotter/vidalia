@@ -1,14 +1,16 @@
 Gem::Specification.new do |s|
   s.name        = 'vidalia'
   s.version     = '0.0.1'
-  s.date        = '2017-01-17'
+  s.date        = '2017-03-21'
   s.summary     = 'Vidalia'
   s.description = 'Vidalia uses layers to simplify the creation and maintenance of API and database calls in your automated test suite.'
   s.add_development_dependency "minitest", [">= 0"]
   s.authors     = ["Jeremy Rotter"]
   s.email       = 'jeremy.rotter@gmail.com'
   s.files       = ['lib/vidalia.rb',
-                   'lib/vidalia/identifier.rb',
+                   'lib/vidalia/element_definition.rb',
+                   'lib/vidalia/interface_definition.rb',
+                   'lib/vidalia/object_definition.rb',
                    'lib/vidalia/artifact.rb',
                    'lib/vidalia/interface.rb',
                    'lib/vidalia/object.rb',

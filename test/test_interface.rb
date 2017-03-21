@@ -3,11 +3,20 @@ require 'test_helper'
 
 class InterfaceTest < Minitest::Test
 
+  def setup
+    # Clean up the Interface Definitions
+    Vidalia::InterfaceDefinition.reset
+    Vidalia::set_logroutine { |logstring|
+      logstring #No need to print anything out here
+    }
+  end
+
   def test_interface_definition_happy_path
+    $var = "cat"
     a = Vidalia::Interface.define(:name => "n") {$var = "dog"} 
-    assert a.is_a?(Vidalia::Identifier)
-    assert Vidalia::Interface.get_definition_data("n",nil)[:name] == "n"
-    assert Vidalia::Interface.get_definition_data("n",nil)[:initialization_block].is_a?(Proc)
+    assert a.is_a?(Vidalia::InterfaceDefinition)
+    assert a.interface.is_a?(Vidalia::Interface)
+    assert $var == "cat"
   end
 
   def test_interface_definition_parameter_checking
@@ -19,105 +28,47 @@ class InterfaceTest < Minitest::Test
     }
   end
 
-  def test_interface_definition_and_creation_happy_path
-    n = Vidalia::Interface.define(:name => "n") {$var = "dog"} 
-    $var = "cat"
-    a = Vidalia::Interface.new(:name => "n")
-    assert $var == "dog"
-    assert a.name == "n"
-    assert a.is_a?(Vidalia::Interface)
-    assert a.id == n
+  def test_interface_child_creation
+    $var = "a"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o1 = Vidalia::Object.define(:name => "o1", :parent => i) {$var = "O1"} 
+    o2 = Vidalia::Object.define(:name => "o2", :parent => i) {$var = "O2"} 
+    o3 = Vidalia::Object.define(:name => "o3", :parent => i) {$var = "O3"} 
 
-    n = Vidalia::Interface.define(:name => "n") {$var = "N"} 
-    o = Vidalia::Interface.define(:name => "o") {$var = "O"} 
-    p = Vidalia::Interface.define(:name => "p") {$var = "P"} 
-    $var = "X"
-    a = Vidalia::Interface.new(:name => "n")
-    assert $var == "N"
-    assert a.name == "n"
-    assert a.is_a?(Vidalia::Interface)
-    assert a.id == n
-    a = Vidalia::Interface.new(:name => "o")
-    assert $var == "O"
-    assert a.name == "o"
-    assert a.is_a?(Vidalia::Interface)
-    assert a.id == o
-    a = Vidalia::Interface.new(:name => "p")
-    assert $var == "P"
-    assert a.name == "p"
-    assert a.is_a?(Vidalia::Interface)
-    assert a.id == p
-  end
+    int = Vidalia::Interface.get("i")
+    assert int.is_a?(Vidalia::Interface)
+    assert $var == "I"
+    assert int.name == "i"
+    assert int != i
+    assert int.parent == nil
+    assert int.number_of_children == 0
 
-  def test_interface_creation_error_checking
-    Vidalia::Interface.define(:name => "n") {$var = "dog"} 
-    assert_raises(TypeError) { 
-      Vidalia::Interface.new("Undefined Name")
-    }
-    assert_raises(RuntimeError) { 
-      Vidalia::Interface.new(:name => "n",:parent => 123)
-    }
-    assert_raises(RuntimeError) { 
-      Vidalia::Interface.new(:name => nil,:parent => nil)
-    }
-    assert_raises(TypeError) { 
-      Vidalia::Interface.new(["not","a","string"])
-    }
-  end
+    obj1 = int.object("o1")
+    assert obj1.is_a?(Vidalia::Object)
+    assert $var == "O1"
+    assert obj1.name == "o1"
+    assert obj1 != o1
+    assert obj1.parent == int
+    assert int.number_of_children == 1
+    assert obj1.number_of_children == 0
 
-  def test_add_and_get_object
-    p_id = Vidalia::Interface.define(:name => "par") {$var = "p"} 
-    c1_id = Vidalia::Object.define(:name => "c1", :parent => p_id) {$var = "1"} 
-    c2_id = Vidalia::Object.define(:name => "c2", :parent => p_id) {$var = "2"} 
-    c3_id = Vidalia::Object.define(:name => "c3", :parent => p_id) {$var = "3"} 
-    p = Vidalia::Interface.new(:name => "par")
-    c1 = Vidalia::Object.new(:name => "c1", :parent => p_id)
-    c2 = Vidalia::Object.new(:name => "c2", :parent => p_id)
-    c3 = Vidalia::Object.new(:name => "c3", :parent => p_id)
-    assert p.add_object(c1) == c1
-    assert p.object("c1") == c1
-    assert p.object("none") == nil
-    assert p.add_object(c2) == c2
-    assert p.object("c1") == c1
-    assert p.object("c2") == c2
-    assert p.object("none") == nil
-    assert p.add_object(c3) == c3
-    assert p.object("c1") == c1
-    assert p.object("c2") == c2
-    assert p.object("c3") == c3
-    assert p.object("none") == nil
-  end
+    obj2 = int.object("o2")
+    assert obj2.is_a?(Vidalia::Object)
+    assert $var == "O2"
+    assert obj2.name == "o2"
+    assert obj2 != o2
+    assert obj2.parent == int
+    assert int.number_of_children == 2
+    assert obj2.number_of_children == 0
 
-  def test_add_object_validity_checking
-    p_id = Vidalia::Interface.define(:name => "par") {$var = "p"} 
-    o_id = Vidalia::Interface.define(:name => "other") {$var = "p"} 
-    Vidalia::Object.define(:name => "chi",:parent => p_id) {$var = "c"} 
-    p = Vidalia::Interface.new(:name => "par")
-    c = Vidalia::Object.new(:name => "chi", :parent => p_id)
-    o = Vidalia::Interface.new(:name => "other")
-    assert_raises(RuntimeError) { 
-      p.add_object(2)
-    }
-    assert_raises(RuntimeError) { 
-      p.add_object("child")
-    }
-    assert_raises(RuntimeError) { 
-      p.add_object(o)
-    }
-  end
-
-  def test_object_validity_checking
-    p_id = Vidalia::Interface.define(:name => "par") {$var = "p"} 
-    Vidalia::Object.define(:name => "chi",:parent => p_id) {$var = "c"} 
-    p = Vidalia::Interface.new(:name => "par")
-    c = Vidalia::Object.new(:name => "chi", :parent => p_id)
-    assert p.add_object(c) == c
-    assert_raises(RuntimeError) { 
-      p.object(:chi)
-    }
-    assert_raises(RuntimeError) { 
-      p.object(c)
-    }
+    obj3 = int.object("o3")
+    assert obj3.is_a?(Vidalia::Object)
+    assert $var == "O3"
+    assert obj3.name == "o3"
+    assert obj3 != o3
+    assert obj3.parent == int
+    assert int.number_of_children == 3
+    assert obj3.number_of_children == 0
   end
 
 end

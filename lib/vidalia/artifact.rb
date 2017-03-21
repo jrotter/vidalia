@@ -2,85 +2,8 @@ module Vidalia
 
   class Artifact
  
-    attr_reader :name, :parent
+    attr_reader :name, :parent, :init_block
 
-    # List of all master Artifact definitions
-    @@definitions = Hash.new
-
-    # Define an Artifact
-    #
-    # This routine saves the specified Artifact parameters to the master list 
-    # of Artifacts.  When a user instantiates a Vidalia::Artifact, it will 
-    # initialize the object with this data and run the specified block of code.
-    #
-    # *Return Value*
-    #
-    # This routine returns a unique ID of the defined Artifact
-    #
-    # *Options*
-    #
-    # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Artifact
-    # +name+:: specifies the type of the Artifact
-    # +block+:: specifies the block of code to be run when the Interface object is initialized
-    #
-    # *Example*
-    #
-    #   Vidalia::Artifact.define(:name => "Blog API") {
-    #     @db_password = ENV['BLOG_DB_PASSWORD']
-    #     @db_userid = ENV['BLOG_DB_PASSWORD']
-    #     @db_ip = ENV['BLOG_DB_IP']
-    #     @db_port = ENV['BLOG_DB_PORT']
-    #   }
-    #
-    #
-    def self.define(opts = {}, &block)
-      o = {
-        :name => nil,
-        :parent => nil
-      }.merge(opts)
-
-      Vidalia::checkvar(o[:name],String,self.class.ancestors,":name")
-      if o[:parent]
-        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
-      end
-
-      objectdata = Hash.new
-      o.each do |key,index|
-        objectdata[key] = index
-      end
-      objectdata[:initialization_block] = block
-      objectdata[:id] = Vidalia::Identifier.new
-
-      @@definitions[o[:parent]] = Hash.new if !@@definitions[o[:parent]]
-      @@definitions[o[:parent]][o[:name]] = objectdata
-      objectdata[:id]
-    end
-
-
-    # Get Vidalia master Artifact data
-    #
-    # *Options*
-    #
-    # Takes two parameters:
-    # +name+:: a string specifying the name of the Artifact
-    # +parent+:: a Vidalia::Identifier specifying the id of the parent Artifact's defintion
-    #
-    # *Example*
-    #
-    #   Vidalia::Artifact.get_definition_data("Blog API")
-    #
-    def self.get_definition_data(name,parent)
-
-      Vidalia::checkvar(name,String,self.class.ancestors,"name")
-      if parent
-        Vidalia::checkvar(parent,Vidalia::Identifier,self.class.ancestors,"parent")
-      end
-
-      @@definitions[parent][name]
-    end
-
-  
     # Create an Artifact
     #
     # Initializes a Vidalia::Artifact using the data set in Vidalia::Artifact.define.  If such data
@@ -90,55 +13,72 @@ module Vidalia
     # *Options*
     #
     # Takes a hash as input where the current options are:
-    # +name+:: specifies the name of the Interface
-    # +parent+:: specifies the Vidalia::Identifier of the parent object
+    # +name+:: (required) specifies the name of the Interface
+    # +parent+:: (required) specifies the Vidalia::Identifier of the parent object
+    # +definition+:: (optional) specifies the Vidalia::Artifact contained by the artifact's definition
     #
     # *Example*
     #
-    #   blog_api = Vidalia::Interface.new("Blog API")
+    #   $$$ Example needed $$$
     #
-    def initialize(opts = {})
+    def initialize(opts = {},&block)
       o = {
         :name => nil,
-        :parent => nil
+        :parent => nil,
+        :definition => nil
       }.merge(opts)
 
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
       @name = o[:name]
-
-      @children = Hash.new
       @type = Vidalia::Artifact unless @type
+      @children = Hash.new
 
       if o[:parent]
-        Vidalia::checkvar(o[:parent],Vidalia::Identifier,self.class.ancestors,"parent")
+        # Add myself as a child of my parent
+        Vidalia::checkvar(o[:parent],Vidalia::Artifact,self.class.ancestors,"parent")
+        @parent = o[:parent]
+        @parent.add_child(self)
+      else
+        # Just kidding.  I'm an orphan.  :(
+        @parent = nil
       end
-      @parent_id = o[:parent] # Can be nil
 
-      objectdata = Vidalia::Artifact.get_definition_data(@name,@parent_id)
+      @source_artifact = o[:definition]
 
-      unless objectdata
-        raise "Cannot find definition data for Vidalia::Artifact name \"#{name}\".  Make sure you've defined it first!"
+      if @source_artifact
+        # If this is an instantiation of a definition
+
+        Vidalia::checkvar(@source_artifact,Vidalia::Artifact,self.class.ancestors,"definition")
+
+        # Copy the initialization block and run it
+        @init_block = @source_artifact.init_block
+        @init_block.call()
+      else
+        # If this is only a definition
+
+        # Store the initialization block
+        @init_block = block
       end
-
-      @id = objectdata[:id]
-      block = objectdata[:initialization_block]
-      self.instance_eval &block
     end
 
 
-    # Find an Artifact definition by name
+    # Copy an Artifact from another Artifact
     #
     # *Options*
     #
     # Takes one parameter:
-    # +name+:: specifies the name of the Artifact to search for
+    # +source+:: specifies the name of the Interface to copy from
     #
     # *Example*
     #
-    #   blog_api = Vidalia::Artifact.find_definition("Blog API")
+    #   $$$ Example Needed $$$
     #
-    def self.find_definition(name)
-      @@interface_definitions[name]
+    def self.copy_from(source)
+      Vidalia::checkvar(source,Vidalia::Artifact,self.class.ancestors,"source")
+      @name = source.type
+      @type = source.type
+      @init_block = source.init_block
+      super
     end
 
   
@@ -159,7 +99,7 @@ module Vidalia
     def add_child(object)
       Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
       @children[object.name] = object
-      object
+      object.set_parent(self)
     end
 
 
@@ -172,11 +112,7 @@ module Vidalia
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
-    #   blog_api = Vidalia::Artifact.new("Blog API")
-    #   blog_post = Vidalia::Artifact.new("Blog Post")
-    #   blog_api.add_child(blog_post)
-    #   my_child = blog_api.get_child("Blog Post")
+    #   $$$ Example needed $$$
     #
     def get_child(name)
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
@@ -184,24 +120,34 @@ module Vidalia
     end
 
 
-    # Set the parent object of this Artifact
+    # Get a the number of children of this Artifact
     #
     # *Options*
     #
-    # This method takes one parameter
-    # +object+:: specifies a Vidalia::Artifact object to be set as the parent
+    # This method takes no parameters.
     #
     # *Example*
     #
-    #   # Note that both the "Blog API" and "Blog Post" Artifacts must be predefined
-    #   blog_api = Vidalia::Artifact.new("Blog API")
-    #   blog_post = Vidalia::Artifact.new("Blog Post")
-    #   blog_post.set_parent(blog_api)
-    # 
-    def set_parent(object)
-      Vidalia::checkvar(object,Vidalia::Artifact,self.class.ancestors,"object")
-      @parent = object
-      object
+    #   $$$ Example needed $$$
+    #
+    def number_of_children
+      @children.size
+    end
+  
+    
+    # Set the parent of this Artifact
+    #
+    # *Options*
+    #
+    # This method takes one parameter:
+    # +parent+: specifies the parent object of this Artifact
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def set_parent(parent)
+      @parent = parent
     end
   
     
