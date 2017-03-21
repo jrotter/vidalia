@@ -13,7 +13,7 @@ class InterfaceTest < Minitest::Test
 
   def test_interface_definition_happy_path
     $var = "cat"
-    a = Vidalia::Interface.define(:name => "n") {$var = "dog"} 
+    a = Vidalia::Interface.define(:name => "m") {$var = "dog"} 
     assert a.is_a?(Vidalia::InterfaceDefinition)
     assert a.interface.is_a?(Vidalia::Interface)
     assert $var == "cat"
@@ -26,6 +26,13 @@ class InterfaceTest < Minitest::Test
     assert_raises(RuntimeError) { 
       Vidalia::Interface.define() {|var| var = "dog"}
     }
+  end
+
+  def test_interface_instantiation_no_block
+    $var = "X"
+    i = Vidalia::Interface.define(:name => "i")
+    int = Vidalia::Interface.get("i")
+    assert $var == "X"
   end
 
   def test_interface_child_creation

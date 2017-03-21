@@ -13,8 +13,8 @@ class ElementTest < Minitest::Test
 
   def test_element_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e = Vidalia::Element.define(:name => "e", :parent => o) {$var = "E"} 
     assert e.is_a?(Vidalia::ElementDefinition)
     assert e.element.is_a?(Vidalia::Element)
@@ -29,10 +29,23 @@ class ElementTest < Minitest::Test
     }
   end
 
-  def test_element_get_definition_happy_path
+  def test_element_instantiation_no_block
     $var = "X"
     i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"}
+    e = Vidalia::Element.define(:name => "e", :parent => o)
+    int = Vidalia::Interface.get("i")
+    assert $var == "I"
+    obj = int.object("o")
+    assert $var == "O"
+    ele = obj.element("e")
+    assert $var == "O"
+  end
+
+  def test_element_get_definition_happy_path
+    $var = "X"
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     e1.add_get { |instring| instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) {$var = "E2"} 
@@ -54,8 +67,8 @@ class ElementTest < Minitest::Test
   end
     
   def test_element_get_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_get { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -64,8 +77,8 @@ class ElementTest < Minitest::Test
 
   def test_element_set_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
     e1.add_set { |instring| $var = instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
@@ -93,8 +106,8 @@ class ElementTest < Minitest::Test
   end
 
   def test_element_set_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_set { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -103,8 +116,8 @@ class ElementTest < Minitest::Test
 
   def test_element_retrieve_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
     e1.add_retrieve { |instring| $var = instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
@@ -132,8 +145,8 @@ class ElementTest < Minitest::Test
   end
 
   def test_element_retrieve_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_retrieve { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -142,8 +155,8 @@ class ElementTest < Minitest::Test
 
   def test_element_verify_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
     e1.add_verify { |instring| $var = instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
@@ -171,8 +184,8 @@ class ElementTest < Minitest::Test
   end
 
   def test_element_verify_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_verify { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -181,8 +194,8 @@ class ElementTest < Minitest::Test
 
   def test_element_confirm_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
     e1.add_confirm { |instring| $var = instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
@@ -210,8 +223,8 @@ class ElementTest < Minitest::Test
   end
 
   def test_element_confirm_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_confirm { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -220,8 +233,8 @@ class ElementTest < Minitest::Test
 
   def test_element_update_definition_happy_path
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
     e1.add_update { |instring| $var = instring }
     e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
@@ -249,8 +262,8 @@ class ElementTest < Minitest::Test
   end
 
   def test_element_update_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     assert_raises(RuntimeError) do
       e1.add_update { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
@@ -259,8 +272,8 @@ class ElementTest < Minitest::Test
 
   def test_element_generic_get_only
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     e1.add_get { $var }
     int = Vidalia::Interface.get("i")
@@ -278,8 +291,8 @@ class ElementTest < Minitest::Test
     
   def test_element_generic_get_and_set
     $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"} 
+    i = Vidalia::Interface.define(:name => "i")
+    o = Vidalia::Object.define(:name => "o", :parent => i)
     e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
     e1.add_get { $var }
     e1.add_set { |value| $var = value }

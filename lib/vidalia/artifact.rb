@@ -50,9 +50,9 @@ module Vidalia
 
         Vidalia::checkvar(@source_artifact,Vidalia::Artifact,self.class.ancestors,"definition")
 
-        # Copy the initialization block and run it
+        # Copy the initialization block and run it if defined
         @init_block = @source_artifact.init_block
-        @init_block.call()
+        @init_block.call() if @init_block
       else
         # If this is only a definition
 

@@ -28,6 +28,16 @@ class ObjectTest < Minitest::Test
     }
   end
 
+  def test_object_instantiation_no_block
+    $var = "X"
+    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
+    o = Vidalia::Object.define(:name => "o", :parent => i)
+    int = Vidalia::Interface.get("i")
+    assert $var == "I"
+    obj = int.object("o")
+    assert $var == "I"
+  end
+
   def test_object_child_creation
     $var = "a"
     i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
