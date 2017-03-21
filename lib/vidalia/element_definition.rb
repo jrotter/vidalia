@@ -81,6 +81,99 @@ module Vidalia
       @element.add_set &block
     end
 
+
+    # Add a "retrieve" function for a Defined Element
+    #
+    # This function will be called to obtain the data element value from the
+    # Object.  A call to "retrieve" really makes the most sense AFTER obtaining
+    # data from the database/API.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "retrieve" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_retrieve(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_retrieve block must take a single parameter"
+      end
+      @element.add_retrieve &block
+    end
+
+
+    # Add a "verify" function for a Defined Element
+    #
+    # This function will be called to obtain the data element value from the
+    # Object.  A call to "verify" really makes the most sense AFTER obtaining
+    # data from the database/API.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "verify" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_verify(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_verify block must take a single parameter"
+      end
+      @element.add_verify &block
+    end
+
+
+    # Add a "confirm" function for a Defined Element
+    #
+    # This function will be called to obtain the data element value from the
+    # Object.  A call to "confirm" really makes the most sense AFTER obtaining
+    # data from the database/API.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "confirm" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_confirm(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_confirm block must take a single parameter"
+      end
+      @element.add_confirm &block
+    end
+
+
+    # Add a "update" function for a Defined Element
+    #
+    # This function will be called to obtain the data element value from the
+    # Object.  A call to "update" really makes the most sense when updating 
+    # data AFTER obtaining data from the database/API.
+    #
+    # *Options*
+    #
+    # Takes a block to be executed when "update" for this defined Element is 
+    # invoked.
+    #
+    # *Example*
+    #
+    #   $$$ Example needed $$$
+    #
+    def add_update(&block)
+      if block.arity > 1
+        raise "Vidalia::ElementDefinition.add_update block must take a single parameter"
+      end
+      @element.add_update &block
+    end
+
+
   end
 
 end

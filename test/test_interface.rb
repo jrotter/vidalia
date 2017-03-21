@@ -6,6 +6,9 @@ class InterfaceTest < Minitest::Test
   def setup
     # Clean up the Interface Definitions
     Vidalia::InterfaceDefinition.reset
+    Vidalia::set_logroutine { |logstring|
+      logstring #No need to print anything out here
+    }
   end
 
   def test_interface_definition_happy_path
