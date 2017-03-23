@@ -31,8 +31,16 @@ user_object.element("Last Name").verify "VanDelay"
 user_object.element("Username").verify "realarchitect"
 
 # Now that we have the data, update the user's name
-user_object.element("Last Name").update "George"
+user_object.element("First Name").update "George"
 user_object.element("Last Name").update "Costanza"
 
 # Commit our name changes
 user_object.update
+
+# Now reread the object and verify that our changes worked
+user_object.read
+user_object.element("ID").verify 7
+user_object.element("First Name").verify "George"
+user_object.element("Last Name").verify "Costanza"
+user_object.element("Username").verify "realarchitect"
+
