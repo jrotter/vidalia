@@ -1,4 +1,5 @@
 require 'vidalia'
+require 'sqlite3'
 
 ###############################################################################
 # Define the interface.  Under the covers, Vidalia will only define the
@@ -15,9 +16,13 @@ app_db = Vidalia::Interface.define(:name => "Application DB")
 # for the data elements within this object.
 ###############################################################################
 user_object = Vidalia::Object.define(:name => "User", :parent => app_db) {
+  singleton_class.class_eval { attr_accessor :id }
   @id = nil
+  singleton_class.class_eval { attr_accessor :first_name }
   @first_name = nil
+  singleton_class.class_eval { attr_accessor :last_name }
   @last_name = nil
+  singleton_class.class_eval { attr_accessor :username }
   @username = nil
 }
 
@@ -28,7 +33,7 @@ user_object = Vidalia::Object.define(:name => "User", :parent => app_db) {
 ###############################################################################
 user_object.add_method(:name => "create") {
   db = SQLite3::Database.open "users.db"
-  sql_string = "INSERT INTO Users VALUES("
+  sql_string = "INSERT INTO users VALUES("
   sql_string << @id.to_s
   sql_string << ","
   sql_string << @first_name.to_s
@@ -37,6 +42,7 @@ user_object.add_method(:name => "create") {
   sql_string << ","
   sql_string << @username.to_s
   sql_string << ")"
+  Vidalia.log("Adding a user with DB call \"#{sql_string}\"")
   db.execute sql_string
   db.close
 }
@@ -48,7 +54,8 @@ user_object.add_method(:name => "create") {
 ###############################################################################
 user_object.add_method(:name => "read") {
   db = SQLite3::Database.open "users.db"
-  sql_string = "SELECT * FROM Users WHERE id = #{@id};"
+  sql_string = "SELECT * FROM users WHERE id = #{@id};"
+  Vidalia.log("Reading user ID=#{@id} with DB call \"#{sql_string}\"")
   results = db.execute sql_string
   result = results[0]
   @id = result.shift
@@ -64,6 +71,19 @@ user_object.add_method(:name => "read") {
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
 user_object.add_method(:name => "update") {
+  db = SQLite3::Database.open "users.db"
+  sql_string = "Update users SET first_name=\'"
+  sql_string << @first_name.to_s
+  sql_string << "\', last_name=\'"
+  sql_string << @last_name.to_s
+  sql_string << "\', username=\'"
+  sql_string << @username.to_s
+  sql_string << "\' WHERE id="
+  sql_string << @id.to_s
+  sql_string << ";"
+  Vidalia.log("Updating user ID=#{@id} with DB call \"#{sql_string}\"")
+  db.execute sql_string
+  db.close
 }
 
 ###############################################################################
@@ -72,6 +92,11 @@ user_object.add_method(:name => "update") {
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
 user_object.add_method(:name => "delete") {
+  db = SQLite3::Database.open "users.db"
+  sql_string = "DELETE FROM users WHERE id = #{@id};"
+  Vidalia.log("Deleting user ID=#{@id} with DB call \"#{sql_string}\"")
+  db.execute sql_string
+  db.close
 }
 
 

@@ -52,7 +52,10 @@ module Vidalia
 
         # Copy the initialization block and run it if defined
         @init_block = @source_artifact.init_block
-        @init_block.call() if @init_block
+        if @init_block
+          block = @init_block
+          instance_eval(&block)
+        end
       else
         # If this is only a definition
 

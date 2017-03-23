@@ -208,7 +208,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def get(inparams = {})
-      @get_function.call(inparams)
+      block = @get_function
+      instance_exec(inparams,&block)
     end
 
 
@@ -246,7 +247,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def set(inparams = {})
-      @set_function.call(inparams)
+      block = @set_function
+      instance_exec(inparams,&block)
     end
 
 
@@ -284,7 +286,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def retrieve(inparams = {})
-      @retrieve_function.call(inparams)
+      block = @retrieve_function
+      instance_exec(inparams,&block)
     end
 
 
@@ -322,7 +325,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def verify(inparams = {})
-      @verify_function.call(inparams)
+      block = @verify_function
+      instance_exec(inparams,&block)
     end
 
 
@@ -360,7 +364,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def confirm(inparams = {})
-      @confirm_function.call(inparams)
+      block = @confirm_function
+      instance_exec(inparams,&block)
     end
 
 
@@ -398,7 +403,8 @@ module Vidalia
     #   $$$ Example needed $$$
     #
     def update(inparams = {})
-      @update_function.call(inparams)
+      block = @update_function
+      instance_exec(inparams,&block)
     end
 
 

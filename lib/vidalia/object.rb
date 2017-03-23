@@ -126,7 +126,8 @@ module Vidalia
       Vidalia::checkvar(name,String,self.class.ancestors,"name")
       define_method name.to_sym do |opts = {}|
         if @added_methods[name]
-          @added_methods[name].call(opts)
+          block = @added_methods[name]
+          instance_exec(opts,&block)
         else
           raise "Tried to call an Object method that doesn't exist."
         end
