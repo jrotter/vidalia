@@ -18,11 +18,8 @@ db = Vidalia::Interface.get("Application DB")
 # Get the Object we'll be working with from our Interface
 user_object = db.object("User")
 
-# Set the ID for the object we want to read
-user_object.element("ID").update 7
-
-# Call our "read" method to get the data for the ID we specified
-user_object.read
+# Call our "read" method to get the data for a specified ID
+user_object.read(:id => 7)
 
 # Verify that the data is what we expect
 user_object.element("ID").verify 7
@@ -38,9 +35,20 @@ user_object.element("Last Name").update "Costanza"
 user_object.update
 
 # Now reread the object and verify that our changes worked
-user_object.read
+user_object.read(:id => 7)
 user_object.element("ID").verify 7
 user_object.element("First Name").verify "George"
 user_object.element("Last Name").verify "Costanza"
 user_object.element("Username").verify "realarchitect"
+
+# Now delete the object
+user_object.delete(:id => 7)
+
+# Now attempt to reread the object and confirm that we got null data back
+user_object.read(:id => 7)
+if user_object.element("ID").confirm nil
+  Vidalia.log("Object was successfully deleted!")
+else
+  raise "Delete didn't work!  Object read came back with data!"
+end
 

@@ -12,213 +12,200 @@ Vidalia allows for easy separation of the workflow and control layers by sitting
 
 == How does Vidalia work?
 
-At the control layer, Parfait allows you to define four basic objects: Applications, Pages, Regions, and Controls.
+At the control layer, Parfait allows you to define three basic artifacts: Interfaces, Objects, and Elements
 
-=== Applications
+=== Interface
 
-An Application is the top layer of the Parfait object hierarchy.  It is simply a collection of Pages.
+An Interface is the top layer of the Vidalia artifact hierarchy.  It is simply a collection of Objects.
 
-=== Collections
+=== Object
 
-A Page is a collection of Controls and Regions that are presented on the same screen.  This could be an actual page, or a panel on the screen that is used throughout the application.
+An Object is a collection of data elements that can be manipulated via the defined Interface.  Basic Object operations (e.g. create, read, update, delete) or more complex ones can be defined by the user.
 
-=== Objects
+==== Object operations
 
-A Region is a specific section on the screen.  Parfait does not require Regions to be defined, but they can be helpful when there are multiple similar controls on the screen, like in a list.
+Operations can be added for an Object to communicate via the Interface.  In some cases, the operation will retrieve data via the interface.  In others the operation will create or alter data via the interface.
 
-A Region can contain Controls or other Regions.
+=== Element
 
-=== Elements
+An Element is a single piece of data within an Object.  All Elements have a set of directives associated with them to enable easier implementation of your test automation.
 
-A Control is a single interaction point on a web page.  There can be data controls like links, text fields, and pulldown menus, as well as non-data controls like links and buttons.  All controls have a set of directives associated with them to enable easier implementation of your test automation.
+==== Element Directives
 
-==== Data Controls
+Manipulation and verification of each data Element is built around the two primary directives +get+ and +set+:
 
-Each data control is built around the two primary directives +get+ and +set+:
+- +get+ - reads and returns the current value of the Element from the Object.  Usually performed after data is retreived via an Object operation.
+- +set+ - updates the current value of the Element in preparation for the next operation on the Object.
 
-- +get+ - reads and returns the current value from the Control
-- +set+ - uses the Control to set a new value.  
+Once these primary directives are defined, Vidalia puts them together to build the following directives for free:
 
-Once these primary directives are defined, Parfait puts them together to build the following directives for free:
+- +retrieve+ - Reads and returns the current value from the Element.  Does not log anything.  (This is the user-callable version of +get+.)
+- +update+ - Sets a new Element value.  Logs the value of the Element both before and after the change for auditing purposes.
+- +confirm+ - Tests the value of the Element, returning +true+ if the input matches the value of the Element and +false+ otherwise.  Does not log anything.
+- +verify+  = Tests the value of the Element, raising an exception if the input does not match the value of the Element.  Returns +true+ otherwise.  Logs successes for auditing purposes.
 
-- +retrieve+ - Reads and returns the current value from the Control.  Does not log anything.  (This is the user-callable version of +get+.)
-- +update+ - Uses the Control to set a new value.  Logs the value of the Control both before and after the change for auditing purposes.
-- +confirm+ - Tests the value of the Control, returning +true+ if the input matches the value of the Control and +false+ otherwise.  Does not log anything.
-- +verify+  = Test the value of the Control, raising an exception if the input does not match the value of the Control.  Returns +true+ otherwise.  Logs successes for auditing purposes.
+== How do I install Vidalia?
 
-==== Non-Data Controls
+Install the Vidalia gem from the command line as follows:
 
-Each non-data control is built upon a single +goto+ directive:
+  $ gem install vidalia
 
-- +goto+ - selects or clicks the control to navigate elsewhere in the application
+== How do I get started with Vidalia?
 
-From this directive, a secondary +navigate+ directive is built:
+The code examples used below are all taken from the Vidalia repository in the +examples/example1+ directory.  In this directory, we will be automating control of user data in the database defined with by the +db_helper.rb+ script.
 
-- +navigate+ - Uses the Control to navigate.  Logs its action.  (This is the user-callable version of +goto+.)
+Remember, Vidalia breaks the code into two layers, so we'll define those layers in different files.  The workflow layer will be defined in +demo.rb+, but let's start by using Parfait to define the control layer in +user_object.rb+.
 
-==== Additional Directives
+=== Define the Interface
 
-Additionally, Application, Page, Region, and Control objects can each have a +check+ directive defined:
+Our first step is to define an Interface.  If the interface has already been defined elsewhere, that definition will be returned.  This allows multiple Object definitions (in multiple files) to be added to the same Interface.
 
-- +check+ - returns true if the Parfait artifact is present on the current screen and false otherwise
+  app_db = Vidalia::Interface.define(:name => "Application DB")
 
-In the spirit of Parfait, this builds a secondary +present+ directive:
+=== Define our Object
 
-- +present+ - returns true if the Parfait artifact is present on the current screen and false otherwise.
+Now we can define our object.  Since we're working with a user entry in our database, we'll name it "User".  The definition will indicate that the Object's parent is our Interface.  Additionally, the Object definition will contain a code block to be run whenever this Object is instantiated.  A typical Object definition block will instantiate object variables.
 
-While manually invokable, the +present+ directive for a control will also be called under the covers each time that control is used to confirm that the artifact you are acting on is still there.
-
-== How do I install Parfait?
-
-Install the Parfait gem from the command line as follows:
-
-  $ gem install parfait
-
-== How do I get started with Parfait?
-
-The code examples used below are all taken from the Parfait repository in the +examples/example1+ directory.  In this directory, we will be automating control of the +index.html+ page.
-
-Remember, Parfait breaks the code into two layers, so we'll define those layers in different files.  The workflow layer will be defined in +demo.rb+, but let's start by using Parfait to define the control layer in +page.rb+.
-
-=== Define a Page
-
-Our first step is to define a page.  We'll name it "Sample Page" to match the name of the page we're controlling:
-
-  sample_page = Parfait::Page.new(:name => "Sample Page")
-
-Next we should add the page to our application:  
-
-  sample_page.add_to_application("Sample App")
-
-Since our application has not yet been defined, this call will actually create the Parfait::Application object under the covers.  This may seem a bit backward, but it allows a whole bunch of Parfait Page definitions to be pre-loaded in our test suite without having to worry about passing around an Application object.  We'll be able to get an instance of this object later on in the workflow layer.
-
-We can also add a check to confirm that we are on our new page:
-
-  sample_page.add_check {
-    Parfait::browser.h1(:text => "Parfait Example Page").present?
+  user_object = Vidalia::Object.define(:name => "User", :parent => app_db) {
+    singleton_class.class_eval { attr_accessor :id }
+    @id = nil
+    singleton_class.class_eval { attr_accessor :first_name }
+    @first_name = nil
+    singleton_class.class_eval { attr_accessor :last_name }
+    @last_name = nil
+    singleton_class.class_eval { attr_accessor :username }
+    @username = nil
   }
 
-Every time we reference the page object, this condition will be tested to ensure that we are where we think we are before continuing.
+=== Define Object operations
 
-=== Add some Controls
+In our example, we will define operations to create, retrieve, update, and delete a User object.  Note that the use of Objects and Elements will be different depending on the type of operation.  To prepare for a "retrieve" operation, the user will set whatever elements are needed to perform the retrieval, after which the operation will be called.  To perform an "create" operation, all impacted Elements must be set before the creation.
 
-Our sample web page starts with a set of radio buttons.  A data control like this can be defined in three steps.
+Let's start with "create":
 
-First, we create a Control object on our Page:
-
-  party = Parfait::Control.new(
-    :name => "Party", 
-    :logtext => "political party"
-    :parent => sample_page)
-
-Then we define +get+ and +set+ directives for the control.  For the +get+, no parameters are necessary and the code passed in should return the value of the control:
-
-  party.add_get {
-    retval = nil
-    retval = Parfait::browser.div(:id => "radio-example").radio(:value => "Federalist").set? ? "Federalist" : retval
-    retval = Parfait::browser.div(:id => "radio-example").radio(:value => "Republicrat").set? ? "Republicrat" : retval
-    retval = Parfait::browser.div(:id => "radio-example").radio(:value => "Know-Nothing").set? ? "Know-Nothing" : retval
-    retval
+  user_object.add_method(:name => "create") {
+    db = SQLite3::Database.open "users.db"
+    sql_string = "INSERT INTO users VALUES("
+    sql_string << @id.to_s
+    sql_string << ","
+    sql_string << @first_name.to_s
+    sql_string << ","
+    sql_string << @last_name.to_s
+    sql_string << ","
+    sql_string << @username.to_s
+    sql_string << ")"
+    Vidalia.log("Adding a user with DB call \"#{sql_string}\"")
+    db.execute sql_string
+    db.close
   }
 
-For the +set+ directive, a single value is taken as input, followed by an optional hash.  In most cases, we can ignore the hash.
+As described above, this operation expects all of the pertinent Elements to already be set.  The operation itself just performs a single database operation to create the new Object.
 
-  party.add_set { |input|
-    Parfait::browser.div(:id => "radio-example").radio(:value => input).set
-  }
+Next we define a "read" operation:
 
-Now that the +get+ and +set+ directives are defined for this control, Parfait will use them to build +update+, +retrieve+, +confirm+, and +verify+ directives for you.  We'll use those in the workflow layer in a bit.
-
-We also have a "Set My Party" button to add as a non-data Control.  Let's add that to our Page definition as well.  The difference with the non-data Control is that the only directive we set here is the +goto+ method:
-
-  set_my_party = Parfait::Control.new(
-    :name => "Set My Party", 
-    :logtext => "Set My Party button"
-    :parent => sample_page)
-  
-  set_my_party.add_goto {
-    Parfait::browser.button(:value => "Set My Party").click
-  }
-
-With a +goto+ directive defined, Parfait will build the +navigate+ directive from that code, allowing navigation with better logging.  Again, we'll see that when we code the workflow layer.
-
-=== Working with Regions
-
-When automating web pages, we often have to deal with repeated elements that are similar, or even identical.  Parfait allows the definition of Regions to focus on a specific entry in that list and then locate the common control from there.  Consider the list of presidents presented in +index.html+/.
-
-We will define a Region to isolate information for a single president.  This wil allow us to easily get at the fields for that president with subsequent control definitions for that region.  First we can define the Region and add it to the Page.
-
-  president_region = Parfait::Region.new(
-    :name => "President", 
-    :parent => sample_page)
-
-The key piece in defining the region is the filter, which reduces the scope Watir is looking at by starting with +Parfait::browser+, applying the filter and then calling +Parfait::filter_browser+ to store the reduced scope. 
-
-The add_filter method will take a single parameter - if more are necessary, then a subfilter should be used instead.
-  
-  # Define a filter so that this region will allow focus on a single entry
-  president_region.add_filter { |president_name|
-    table_rows = Parfait::browser.div(:id => "presidents").trs
-    table_rows.each do |tr|
-      if tr.text =~ /#{president_name}/
-        Parfait::filter_browser tr
-        break
-      end
+  user_object.add_method(:name => "read") { |inhash|
+    db = SQLite3::Database.open "users.db"
+    if inhash[:id] 
+      sql_string = "SELECT * FROM users WHERE id = #{inhash[:id]};"
+      Vidalia.log("Reading user ID=#{inhash[:id]} with DB call \"#{sql_string}\"")
+    elsif inhash[:username]
+      sql_string = "SELECT * FROM users WHERE username = #{inhash[:username]};"
+      Vidalia.log("Reading user username=#{inhash[:username]} with DB call \"#{sql_string}\"")
     end
-  }
-
-With this filter defined, we can access the controls under each president much more easily.  Let's start with the nickname control:
-
-  nickname = Parfait::Control.new(
-    :name => "Nickname", 
-    :logtext => "president nickname", 
-    :parent => president_region)
-
-  nickname.add_get {
-    Parfait::browser.text_field.value
-  }
-
-  nickname.add_set { |input|
-    Parfait::browser.text_field.set input
-  }
-
-Note that the +get+ and the +set+ rely on inheriting the filtered browser from the "President" region.  That means the Watir code can just assume that it's looking at a single table row.  Since this is the only text field within that row, no further specification is necessary than +Parfait::browser.text_field+ to access that control.
-
-Similarly, the "Update Nickname" control can be defined:
-
-  update_nickname = Parfait::Control.new(
-    :name => "Set My Party", 
-    :logtext => "Set My Party button", 
-    :parent => president_region)
+    results = db.execute sql_string
   
-  update_nickname.add_goto {
-    Parfait::browser.button(:value => "Update").click
+    # Handle empty array
+    results << [nil,nil,nil,nil] if results.size == 0
+  
+    result = results[0]
+    @id = result.shift
+    @first_name = result.shift
+    @last_name = result.shift
+    @username = result.shift
+    db.close
   }
 
-Finally, we can define the remaining two controls as well:
+Note that this operation doesn't require any Element data to be pre-set.  It will overwrite whatever is stored in the Object with the data returned from the database call.
 
-  biography = Parfait::Control.new(
-    :name => "Biography", 
-    :logtext => "Biography link", 
-    :parent => president_region)
-  
-  biography.add_goto {
-    Parfait::browser.link(:text => "Biography").click
-  }
-  
-  
-  cabinet = Parfait::Control.new(
-    :name => "Cabinet", 
-    :logtext => "Cabinet link", 
-    :parent => president_region)
-  
-  cabinet.add_goto {
-    Parfait::browser.link(:text => "Cabinet").click
+The "update" operation is similar to "create" in that Element data is already expected to be defined for this operation:
+
+user_object.add_method(:name => "update") {
+  db = SQLite3::Database.open "users.db"
+  sql_string = "Update users SET first_name=\'"
+  sql_string << @first_name.to_s
+  sql_string << "\', last_name=\'"
+  sql_string << @last_name.to_s
+  sql_string << "\', username=\'"
+  sql_string << @username.to_s
+  sql_string << "\' WHERE id="
+  sql_string << @id.to_s
+  sql_string << ";"
+  Vidalia.log("Updating user ID=#{@id} with DB call \"#{sql_string}\"")
+  db.execute sql_string
+  db.close
+}
+
+And "delete" requires just an Element or two to accomplish its goal:
+
+  user_object.add_method(:name => "delete") { |inhash|
+    db = SQLite3::Database.open "users.db"
+    if inhash[:id] 
+      sql_string = "DELETE FROM users WHERE id = #{inhash[:id]};"
+      Vidalia.log("Deleting user ID=#{inhash[:id]} with DB call \"#{sql_string}\"")
+    elsif inhash[:username]
+      sql_string = "DELETE * FROM users WHERE username = #{inhash[:username]};"
+      Vidalia.log("Deleting user username=#{inhash[:username]} with DB call \"#{sql_string}\"")
+    end
+    db.execute sql_string
+    db.close
   }
 
-And that completes the Page definition.  Now on to the workflow layer.
+Finally, we will complete the Object definition by telling Vidalia how to set and get each Element value.  To do this, we have to define the Element objects:
+
+  id_element = Vidalia::Element.define(:name => "ID", :parent => user_object) 
+  id_element.add_get { |opts|
+    @parent.id
+  }
+  id_element.add_set { |value|
+    @parent.id = value
+  }
+
+For the most part, Element definitions will be this simple.  Just name them, associate them with their parent Object, and specify the "get" and "set" directives.  With the +get+ and +set+ directives defined, Vidalia will use them to build +update+, +retrieve+, +confirm+, and +verify+ directives for you.  We'll use those in the workflow layer in a bit.
+
+We need three more Elements to complete our example:
+
+  first_name_element = Vidalia::Element.define(:name => "First Name", :parent => user_object) 
+  first_name_element.add_get { |opts|
+    @parent.first_name
+  }
+  first_name_element.add_set { |value|
+    @parent.first_name = value
+  }
+
+
+  last_name_element = Vidalia::Element.define(:name => "Last Name", :parent => user_object) 
+  last_name_element.add_get { |opts|
+    @parent.last_name
+  }
+  last_name_element.add_set { |value|
+    @parent.last_name = value
+  }
+
+
+  username_element = Vidalia::Element.define(:name => "Username", :parent => user_object) 
+  username_element.add_get { |opts|
+    @parent.username
+  }
+  username_element.add_set { |value|
+    @parent.username = value
+  }
+
+
+And now our Object declaration is complete!  Now on to the workflow layer.
 
 === Invoke the Workflow
+
+$$$ I STOPPED HERE $$$
 
 To define the workflow layer, let's edit +demo.rb+.  First we need to require Watir and Parfait:
 
