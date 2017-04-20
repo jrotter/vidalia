@@ -12,7 +12,7 @@ Vidalia allows for easy separation of the workflow and control layers by sitting
 
 == How does Vidalia work?
 
-At the control layer, Parfait allows you to define three basic artifacts: Interfaces, Objects, and Elements
+At the control layer, Vidalia allows you to define three basic artifacts: Interfaces, Objects, and Elements
 
 === Interface
 
@@ -54,7 +54,7 @@ Install the Vidalia gem from the command line as follows:
 
 The code examples used below are all taken from the Vidalia repository in the +examples/example1+ directory.  In this directory, we will be automating control of user data in the database defined with by the +db_helper.rb+ script.
 
-Remember, Vidalia breaks the code into two layers, so we'll define those layers in different files.  The workflow layer will be defined in +demo.rb+, but let's start by using Parfait to define the control layer in +user_object.rb+.
+Remember, Vidalia breaks the code into two layers, so we'll define those layers in different files.  The workflow layer will be defined in +demo.rb+, but let's start by using Vidalia to define the control layer in +user_object.rb+.
 
 === Define the Interface
 
@@ -205,61 +205,74 @@ And now our Object declaration is complete!  Now on to the workflow layer.
 
 === Invoke the Workflow
 
-$$$ I STOPPED HERE $$$
+To define the workflow layer, let's edit +demo.rb+.  First we need to require Vidalia:
 
-To define the workflow layer, let's edit +demo.rb+.  First we need to require Watir and Parfait:
-
-  require 'watir-webdriver'
-  require 'parfait'
+  require 'vidalia'
   
-Next we want to include our page definition.
+Next we want to load our object definition.
 
   require './page'
 
-Then we can set up the browser, go to the sample page, and tell Parfait about it.  You'll want to adjust the directory here as necessary.
+Before we go any further, we also need to pass a logging routine to Vidalia.  This routine just tells Vidalia how to log a given string.  For our demonstration, we'll just print to stdout:
 
-  browser = Watir::Browser.new
-  browser.goto "file://#{ENV['HOME']}/git/parfait/examples/example1/index.html"
-  
-  Parfait::set_browser(browser)
-
-Before we start using our directives, we also need to pass a logging routine to Parfait.  This routine just tells Parfait how to log a given string.  For our demonstration, we'll just print to stdout:
-
-  Parfait::set_logroutine { |logstring|
+  Vidalia::set_logroutine { |logstring|
     puts logstring
   }
 
-And finally, let's get the Application we defined in +page.rb+ saved into an object:
+For the purposes of our example, we need to pull in the database defined by +db_helper+.  This will use the +sqlite3+ gem (which is not needed for Vidalia, but needs to be installed to run this test) to build an in-memory database of user data for us to work with.  Note that we can now use the log routine we just defined.
 
-  app = Parfait::Application.find("Sample App")
+  Vidalia.log("Building the database for this test")
+  require './db_helper'
 
-Now we can invoke directives!  With all the setup behind us, it's now pretty straightforward to manipulate the controls on this page.  Let's start by setting our party:
+Now we can get the Interface we defined in +user_object.rb+ instantiated into an object:
 
-  app.page("Sample Page").control("Party").update "Republicrat"
+  db = Vidalia::Interface.get("Application DB")
 
-Note that the logging for that call indicates both what the control contained previously as well as what it has been set to.  
+Finally, we can instantiate our user object:
 
-Also, remember that under the covers, for any call taking action on +page("Sample Page")+, Parfait is using the +present+ directive to confirm that the page is still visible before continuing.
+  user_object = db.object("User")
 
-Any of the directives will work on this control.  If we want to verify that it is set as we requested, we can do that as well:
+Now we get to the good stuff!  With all the setup behind us, it's now pretty straightforward to use our interface.  Let's start by reading a user record.  We'll the user with an ID of 7, who we happen to know is Art VanDelay:
 
-  app.page("Sample Page").control("Party").verify "Republicrat"
+  user_object.read(:id => 7)
 
-We can submit our change using the "Set My Party" button:
+Now +user_object+ contains all of the data for the user with ID=7.  We can now use the +verify+ directive to confirm that it contains what we expected it to contain:
 
-  app.page("Sample Page").control("Set My Party").navigate
+  user_object.element("First Name").verify "Art"
+  user_object.element("Last Name").verify "VanDelay"
+  user_object.element("Username").verify "realarchitect"
 
-Using the Region we defined, we can also easily manipulate controls within the table.  To change the nickname for John Adams, we can just target his table entry like this:
+As described above, these directives will log that they have successfully verified the values or they will raise an exception if they fail.
 
-  app.page("Sample Page").region("President" => "John Adams").control("Nickname").update "Sammy's Bro"
+With our user data in hand, now we can manipulate it:
 
-Similarly, we can verify his nickname:
+  user_object.element("First Name").update "George"
+  user_object.element("Last Name").update "Costanza"
 
-  app.page("Sample Page").region("President" => "John Adams").control("Nickname").verify "Sammy's Bro"
+Then save our changes to the database:
 
-We can also use our Region to navigate to the biography for Thomas Jefferson:
+  user_object.update
 
-  app.page("Sample Page").region("President" => "Thomas Jefferson").control("Biography").navigate
+Again, we can verify that our update worked with a quick +read+ from the database and a call to +verify+ each element of the object:
 
-This is a simple example, but hopefully it demonstrates the power and flexibility Parfait gives you in managing controls and using them in the workflow layer of your test automation.
+  user_object.read(:id => 7)
+  user_object.element("ID").verify 7
+  user_object.element("First Name").verify "George"
+  user_object.element("Last Name").verify "Costanza"
+  user_object.element("Username").verify "realarchitect"
+
+As another example, we can call the +delete+ method to remove the object from the database:
+
+  user_object.delete(:id => 7)
+
+And finally, we can demonstrate the +confirm+ directive by attempting to +read+ the deleted object and confirming that nothing was returned:
+
+  user_object.read(:id => 7)
+  if user_object.element("ID").confirm nil
+    Vidalia.log("Object was successfully deleted!")
+  else
+    raise "Delete didn't work!  Object read came back with data!"
+  end
+
+This is a simple example, but hopefully it demonstrates the power and flexibility Vidalia gives you in managing interfaces and objects and using them in the workflow layer of your test automation.
 

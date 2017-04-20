@@ -1,5 +1,8 @@
 require 'vidalia'
 
+# Load in the object definition - every Vidalia program will have to do this
+require './user_object'
+
 # Set a logroutine for Vidalia
 Vidalia::set_logroutine { |logstring|
   puts logstring
@@ -8,9 +11,6 @@ Vidalia::set_logroutine { |logstring|
 # This is just scaffolding for the test.  Build the database.
 Vidalia.log("Building the database for this test")
 require './db_helper'
-
-# Load in the object definition - every Vidalia program will have to do this
-require './user_object'
 
 # Get the Interface object (which has been pre-set by the control layer)
 db = Vidalia::Interface.get("Application DB")
