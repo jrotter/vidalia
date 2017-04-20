@@ -52,11 +52,20 @@ user_object.add_method(:name => "create") {
 #
 # Vidalia will expect all elements to be read AFTER this method is invoked
 ###############################################################################
-user_object.add_method(:name => "read") {
+user_object.add_method(:name => "read") { |inhash|
   db = SQLite3::Database.open "users.db"
-  sql_string = "SELECT * FROM users WHERE id = #{@id};"
-  Vidalia.log("Reading user ID=#{@id} with DB call \"#{sql_string}\"")
+  if inhash[:id] 
+    sql_string = "SELECT * FROM users WHERE id = #{inhash[:id]};"
+    Vidalia.log("Reading user ID=#{inhash[:id]} with DB call \"#{sql_string}\"")
+  elsif inhash[:username]
+    sql_string = "SELECT * FROM users WHERE username = #{inhash[:username]};"
+    Vidalia.log("Reading user username=#{inhash[:username]} with DB call \"#{sql_string}\"")
+  end
   results = db.execute sql_string
+
+  # Handle empty array
+  results << [nil,nil,nil,nil] if results.size == 0
+
   result = results[0]
   @id = result.shift
   @first_name = result.shift
@@ -91,10 +100,15 @@ user_object.add_method(:name => "update") {
 #
 # Vidalia will expect all elements to be set BEFORE this method is invoked
 ###############################################################################
-user_object.add_method(:name => "delete") {
+user_object.add_method(:name => "delete") { |inhash|
   db = SQLite3::Database.open "users.db"
-  sql_string = "DELETE FROM users WHERE id = #{@id};"
-  Vidalia.log("Deleting user ID=#{@id} with DB call \"#{sql_string}\"")
+  if inhash[:id] 
+    sql_string = "DELETE FROM users WHERE id = #{inhash[:id]};"
+    Vidalia.log("Deleting user ID=#{inhash[:id]} with DB call \"#{sql_string}\"")
+  elsif inhash[:username]
+    sql_string = "DELETE * FROM users WHERE username = #{inhash[:username]};"
+    Vidalia.log("Deleting user username=#{inhash[:username]} with DB call \"#{sql_string}\"")
+  end
   db.execute sql_string
   db.close
 }
