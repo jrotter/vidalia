@@ -78,4 +78,20 @@ class InterfaceTest < Minitest::Test
     assert obj3.number_of_children == 0
   end
 
+  def test_multiple_interface_definition
+    a = Vidalia::Interface.define(:name => "i")
+    o1 = Vidalia::Object.define(:name => "o1", :parent => a) {$var = "O1"} 
+    b = Vidalia::Interface.define(:name => "i")
+    o2 = Vidalia::Object.define(:name => "o2", :parent => b) {$var = "O2"} 
+    int = Vidalia::Interface.get("i")
+
+    obj1 = int.object("o1")
+    assert obj1.is_a?(Vidalia::Object)
+    assert obj1.name == "o1"
+
+    obj2 = int.object("o2")
+    assert obj2.is_a?(Vidalia::Object)
+    assert obj2.name == "o2"
+  end
+
 end

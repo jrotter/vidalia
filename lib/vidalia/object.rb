@@ -106,6 +106,7 @@ module Vidalia
       o = {
         :name => nil
       }.merge(opts)
+
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
       @added_methods[o[:name]] = block
     end

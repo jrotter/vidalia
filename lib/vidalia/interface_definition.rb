@@ -35,7 +35,7 @@ module Vidalia
       Vidalia::checkvar(o[:name],String,self.class.ancestors,"name")
 
       # It's OK to "define" an Interface that has already been defined
-      unless Vidalia::InterfaceDefinition.find(o[:name])
+      unless @interface = Vidalia::InterfaceDefinition.find(o[:name])
         @interface = Vidalia::Interface.new(opts,&block)
         @@interfaces << @interface
       end

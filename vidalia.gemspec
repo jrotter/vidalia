@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'vidalia'
-  s.version     = '0.0.1'
-  s.date        = '2017-04-20'
+  s.version     = '0.0.2'
+  s.date        = '2017-04-25'
   s.summary     = 'Vidalia'
   s.description = 'Vidalia uses layers to simplify the creation and maintenance of API and database calls in your automated test suite.'
   s.add_development_dependency 'minitest', '~> 0'
