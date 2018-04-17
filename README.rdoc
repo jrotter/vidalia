@@ -129,21 +129,21 @@ Note that this operation doesn't require any Element data to be pre-set.  It wil
 
 The "update" operation is similar to "create" in that Element data is already expected to be defined for this operation:
 
-user_object.add_method(:name => "update") {
-  db = SQLite3::Database.open "users.db"
-  sql_string = "Update users SET first_name=\'"
-  sql_string << @first_name.to_s
-  sql_string << "\', last_name=\'"
-  sql_string << @last_name.to_s
-  sql_string << "\', username=\'"
-  sql_string << @username.to_s
-  sql_string << "\' WHERE id="
-  sql_string << @id.to_s
-  sql_string << ";"
-  Vidalia.log("Updating user ID=#{@id} with DB call \"#{sql_string}\"")
-  db.execute sql_string
-  db.close
-}
+  user_object.add_method(:name => "update") {
+    db = SQLite3::Database.open "users.db"
+    sql_string = "Update users SET first_name=\'"
+    sql_string << @first_name.to_s
+    sql_string << "\', last_name=\'"
+    sql_string << @last_name.to_s
+    sql_string << "\', username=\'"
+    sql_string << @username.to_s
+    sql_string << "\' WHERE id="
+    sql_string << @id.to_s
+    sql_string << ";"
+    Vidalia.log("Updating user ID=#{@id} with DB call \"#{sql_string}\"")
+    db.execute sql_string
+    db.close
+  }
 
 And "delete" requires just an Element or two to accomplish its goal:
 
@@ -203,12 +203,57 @@ We need three more Elements to complete our example:
 
 And now our Object declaration is complete!  Now on to the workflow layer.
 
+=== Defining Interface, Objects, and Elements using the DSL
+
+Alternatively, the Vidalia DSL can be used to define an interface, its objects, and each object's elements. The intent of the DSL is to provide a cleaner way to define Vidalia artifacts by minimizing boilerplate code and eliminiating the need to store definitions in variables and pass them to descendants. Here is how the previous examples can be re-written using the DSL:
+
+  interface 'Application DB' do
+
+    object 'User' do
+      init do
+        singleton_class.class_eval { attr_accessor :id  }
+        @id = nil
+        singleton_class.class_eval { attr_accessor :first_name  }
+        @first_name = nil
+        singleton_class.class_eval { attr_accessor :last_name  }
+        @last_name = nil
+        singleton_class.class_eval { attr_accessor :username  }
+        @username = nil
+      end
+
+      create do
+        singleton_class.class_eval { attr_accessor :id }
+        @id = nil
+        singleton_class.class_eval { attr_accessor :first_name }
+        @first_name = nil
+        singleton_class.class_eval { attr_accessor :last_name }
+        @last_name = nil
+        singleton_class.class_eval { attr_accessor :username }
+        @username = nil
+      end
+
+      read { ... }
+      update { ... }
+      delete { ... }
+
+      element 'ID' do
+        get { |opts| @parent.id }
+        set { |value| @@parent.id = value }
+      end
+
+      element 'First Name' { ... }
+      element 'Last Name' { ... }
+      element 'Username' { ... }
+    end
+  end
+
+
 === Invoke the Workflow
 
 To define the workflow layer, let's edit +demo.rb+.  First we need to require Vidalia:
 
   require 'vidalia'
-  
+
 Next we want to load our object definition.
 
   require './page'
