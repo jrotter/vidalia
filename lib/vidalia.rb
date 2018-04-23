@@ -5,6 +5,7 @@ require 'vidalia/artifact'
 require 'vidalia/interface'
 require 'vidalia/object'
 require 'vidalia/element'
+require 'vidalia/dsl'
 
 # [cat]  something
 # something else
