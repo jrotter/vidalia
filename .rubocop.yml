@@ -1,0 +1,24 @@
+# Don't force indentation on a heredoc
+Layout/IndentHeredoc:
+  Enabled: false
+  EnforcedStyle: unindent
+  SupportedStyles:
+    - squiggly
+    - active_support
+    - powerpack
+    - unindent
+
+# Left-align hash keys
+Layout/AlignHash:
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: key
+
+# Don't force the closing paren to match the start of the line where the
+# opening paren is.
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+
+# Don't yell at me about indentation of parameters
+Layout/FirstParameterIndentation:
+  Enabled: false
+

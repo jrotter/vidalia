@@ -1,312 +1,152 @@
-require 'minitest/autorun'
-require 'test_helper'
+describe Vidalia::Element do
+  parallelize_me!
 
-class ElementTest < Minitest::Test
-
-  def setup
-    # Clean up the Interface Definitions
-    Vidalia::InterfaceDefinition.reset
-    Vidalia::set_logroutine { |logstring|
-      logstring #No need to print anything out here
-    }
+  before do
+    class << self
+      attr_accessor :count
+    end
+    @count = 0
   end
 
-  def test_element_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e = Vidalia::Element.define(:name => "e", :parent => o) {$var = "E"} 
-    assert e.is_a?(Vidalia::ElementDefinition)
-    assert e.element.is_a?(Vidalia::Element)
-    assert o.object.number_of_children == 1
-    assert o.object.get_child("e") == e.element
-    assert $var == "X"
-  end
+  describe 'initialize' do
+    before do
+      class Vidalia::Element
+        attr_accessor :human_name
+      end
+    end
 
-  def test_element_definition_parameter_checking
-    assert_raises(RuntimeError) { 
-      raise "hello"
-    }
-  end
+    after do
+      class Vidalia::Element
+        undef_method :human_name, :human_name=
+      end
+    end
 
-  def test_element_instantiation_no_block
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i") {$var = "I"} 
-    o = Vidalia::Object.define(:name => "o", :parent => i) {$var = "O"}
-    e = Vidalia::Element.define(:name => "e", :parent => o)
-    int = Vidalia::Interface.get("i")
-    assert $var == "I"
-    obj = int.object("o")
-    assert $var == "O"
-    ele = obj.element("e")
-    assert $var == "O"
-  end
+    it 'should create an element with only a name and a defintion block' do
+      test = self
+      test_def = proc { test.count += 1 }
+      test_def_arg = proc do |arg|
+        arg.must_be_nil
+        test.count += 1
+      end
 
-  def test_element_get_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    e1.add_get { |instring| instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) {$var = "E2"} 
-    e2.add_get { |inhash| inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) {$var = "E3"} 
-    e3.add_get { |do_not_care| "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) {$var = "E4"} 
-    e4.add_get { "Egypt" }
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    assert ele1.get("hi") == "hi"
-    assert ele2.get({:a => "A",:b => "B",:c => "C"}) == "B"
-    assert ele3.get() == "zebra"
-    assert ele4.get() == "Egypt"
-  end
-    
-  def test_element_get_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_get { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
+      @count.must_equal 0
+      elem = Vidalia::Element.new('New Element', definition_block: test_def)
+      elem.human_name.must_equal 'New Element'
+      @count.must_equal 1
+
+      elem = Vidalia::Element.new :new_element, definition_block: test_def_arg
+      elem.human_name.must_equal 'new_element'
+      @count.must_equal 2
+    end
+
+    it 'should create an element and pass an argument into the definition block' do
+      test = self
+      test_def = proc do |arg|
+        arg.must_equal 'parent'
+        test.count += 1
+      end
+
+      @count.must_equal 0
+      elem = Vidalia::Element.new('New Element',
+                                  parent_entity: 'parent',
+                                  definition_block: test_def)
+      @count.must_equal 1
     end
   end
 
-  def test_element_set_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
-    e1.add_set { |instring| $var = instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
-    e2.add_set { |inhash| $var = inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) { } 
-    e3.add_set { |do_not_care| $var = "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) { } 
-    e4.add_set { $var = "Egypt" }
+  describe 'generic_hooks, retrieve, verify, confirm, and update' do
+    before do
+      @logtext = ''
+      Vidalia.set_logroutine { |str| @logtext << "#{str}\n" }
 
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    $var = "X"
-    ele1.set("hi")
-    assert $var == "hi"
-    ele2.set({:a => "A",:b => "B",:c => "C"})
-    assert $var == "B"
-    ele3.set()
-    assert $var == "zebra"
-    ele4.set()
-    assert $var == "Egypt"
-  end
+      interface 'My Interface' do
+        open { true }
+        close { |_conn| false }
+        entity 'My Entity' do
+          read do |_conn|
+            @my_inferred_element = 'my inferred element'
+            @my_explicit_element = 'my explicit element'
+          end
 
-  def test_element_set_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_set { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
+          element 'My Explicit Element' do |ent|
+            get { "elem: #{ent.instance_variable_get :@my_explicit_element}" }
+            set { |val| ent.instance_variable_set :@my_explicit_element, val }
+          end
+        end
+      end
+    end
+
+    it 'should add generic retrieve, verify, confirm, and update methods for ' \
+      'an explicitly defined element through the DSL' do
+      ent = Vidalia::Interface.get('My Interface').entity('My Entity')
+      ent.read
+
+      elem = ent.element('My Explicit Element')
+
+      # Get and set
+      elem.get.must_equal 'elem: my explicit element'
+      elem.set 'my EXPLICIT element'
+      elem.get.must_equal 'elem: my EXPLICIT element'
+
+      elem.retrieve.must_equal 'elem: my EXPLICIT element'
+
+      # Verify
+      proc do
+        elem.verify 'elem: my explicit element'
+      end.must_raise RuntimeError
+      elem.verify 'elem: my EXPLICIT element'
+      @logtext.must_equal "Verified My Explicit Element to be \"elem: my EXPLICIT element\"\n"
+
+      # Confirm
+      elem.confirm('elem: my explicit element').must_equal false
+      elem.confirm('elem: my EXPLICIT element').must_equal true
+
+      # Update
+      elem.update 'my explicit element'
+      @logtext.must_equal "Verified My Explicit Element to be \"elem: my EXPLICIT element\"\n" \
+        "Entering My Explicit Element: \"my explicit element\" (was \"elem: " \
+        "my EXPLICIT element\")\n"
+
+      elem.get.must_equal 'elem: my explicit element'
+    end
+
+    it 'should add generic retrieve, verify, confirm, and update methods for ' \
+      'an implicitly defined element' do
+      ent = Vidalia::Interface.get('My Interface').entity('My Entity')
+      ent.read
+
+      elem = ent.element('My Inferred Element')
+
+      # Get and set
+      elem.get.must_equal 'my inferred element'
+      elem.set 'my INFERRED element'
+      elem.get.must_equal 'my INFERRED element'
+
+      elem.retrieve.must_equal 'my INFERRED element'
+
+      # Verify
+      proc do
+        elem.verify 'my inferred element'
+      end.must_raise RuntimeError
+      elem.verify 'my INFERRED element'
+      @logtext.must_equal "Verified My Inferred Element to be \"my INFERRED element\"\n"
+
+      # Confirm
+      elem.confirm('my inferred element').must_equal false
+      elem.confirm('my INFERRED element').must_equal true
+
+      # Update
+      elem.update 'my inferred element'
+      @logtext.must_equal "Verified My Inferred Element to be \"my INFERRED element\"\n" \
+        "Entering My Inferred Element: \"my inferred element\" (was \"" \
+        "my INFERRED element\")\n"
+      elem.get.must_equal 'my inferred element'
+
+      elem.update 'my inferred element'
+      @logtext.must_equal "Verified My Inferred Element to be \"my INFERRED element\"\n" \
+        "Entering My Inferred Element: \"my inferred element\" (was \"" \
+        "my INFERRED element\")\n" \
+        "My Inferred Element is already set to \"my inferred element\"\n"
     end
   end
-
-  def test_element_retrieve_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
-    e1.add_retrieve { |instring| $var = instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
-    e2.add_retrieve { |inhash| $var = inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) { } 
-    e3.add_retrieve { |do_not_care| $var = "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) { } 
-    e4.add_retrieve { $var = "Egypt" }
-
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    $var = "X"
-    ele1.retrieve("hi")
-    assert $var == "hi"
-    ele2.retrieve({:a => "A",:b => "B",:c => "C"})
-    assert $var == "B"
-    ele3.retrieve()
-    assert $var == "zebra"
-    ele4.retrieve()
-    assert $var == "Egypt"
-  end
-
-  def test_element_retrieve_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_retrieve { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
-    end
-  end
-
-  def test_element_verify_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
-    e1.add_verify { |instring| $var = instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
-    e2.add_verify { |inhash| $var = inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) { } 
-    e3.add_verify { |do_not_care| $var = "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) { } 
-    e4.add_verify { $var = "Egypt" }
-
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    $var = "X"
-    ele1.verify("hi")
-    assert $var == "hi"
-    ele2.verify({:a => "A",:b => "B",:c => "C"})
-    assert $var == "B"
-    ele3.verify()
-    assert $var == "zebra"
-    ele4.verify()
-    assert $var == "Egypt"
-  end
-
-  def test_element_verify_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_verify { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
-    end
-  end
-
-  def test_element_confirm_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
-    e1.add_confirm { |instring| $var = instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
-    e2.add_confirm { |inhash| $var = inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) { } 
-    e3.add_confirm { |do_not_care| $var = "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) { } 
-    e4.add_confirm { $var = "Egypt" }
-
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    $var = "X"
-    ele1.confirm("hi")
-    assert $var == "hi"
-    ele2.confirm({:a => "A",:b => "B",:c => "C"})
-    assert $var == "B"
-    ele3.confirm()
-    assert $var == "zebra"
-    ele4.confirm()
-    assert $var == "Egypt"
-  end
-
-  def test_element_confirm_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_confirm { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
-    end
-  end
-
-  def test_element_update_definition_happy_path
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) { } 
-    e1.add_update { |instring| $var = instring }
-    e2 = Vidalia::Element.define(:name => "e2", :parent => o) { } 
-    e2.add_update { |inhash| $var = inhash[:b] }
-    e3 = Vidalia::Element.define(:name => "e3", :parent => o) { } 
-    e3.add_update { |do_not_care| $var = "zebra" }
-    e4 = Vidalia::Element.define(:name => "e4", :parent => o) { } 
-    e4.add_update { $var = "Egypt" }
-
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele2 = obj.element("e2")
-    ele3 = obj.element("e3")
-    ele4 = obj.element("e4")
-    $var = "X"
-    ele1.update("hi")
-    assert $var == "hi"
-    ele2.update({:a => "A",:b => "B",:c => "C"})
-    assert $var == "B"
-    ele3.update()
-    assert $var == "zebra"
-    ele4.update()
-    assert $var == "Egypt"
-  end
-
-  def test_element_update_definition_parameter_checking
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    assert_raises(RuntimeError) do
-      e1.add_update { |string1,string2,string3| "#{string1}#{string2}#{string3}" }
-    end
-  end
-
-  def test_element_generic_get_only
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    e1.add_get { $var }
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    $var = 1
-    assert ele1.get("foo") == 1
-    $var = 2
-    assert ele1.retrieve("foo") == 2
-    $var = 3
-    assert ele1.confirm(3)
-    $var = 4
-    ele1.verify(4)
-  end
-    
-  def test_element_generic_get_and_set
-    $var = "X"
-    i = Vidalia::Interface.define(:name => "i")
-    o = Vidalia::Object.define(:name => "o", :parent => i)
-    e1 = Vidalia::Element.define(:name => "e1", :parent => o) {$var = "E1"} 
-    e1.add_get { $var }
-    e1.add_set { |value| $var = value }
-    int = Vidalia::Interface.get("i")
-    obj = int.object("o")
-    ele1 = obj.element("e1")
-    ele1.set(1)
-    assert ele1.get("foo") == 1
-    ele1.update(2)
-    assert ele1.retrieve("foo") == 2
-    ele1.set(3)
-    assert ele1.confirm(3)
-    ele1.update(4)
-    ele1.verify(4)
-  end
-    
 end
