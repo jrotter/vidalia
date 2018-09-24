@@ -6,6 +6,7 @@ require 'vidalia/interface'
 require 'vidalia/object'
 require 'vidalia/element'
 require 'vidalia/dsl'
+require 'vidalia/mysql'
 
 # [cat]  something
 # something else

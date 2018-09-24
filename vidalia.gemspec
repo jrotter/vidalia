@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'vidalia'
-  s.version     = '0.1.0'
-  s.date        = '2018-04-20'
+  s.version     = '0.1.1'
+  s.date        = '2018-09-24'
   s.summary     = 'Vidalia'
   s.description = 'Vidalia uses layers to simplify the creation and maintenance of API and database calls in your automated test suite.'
   s.add_development_dependency 'minitest', '~> 0'
@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
                    'lib/vidalia/interface.rb',
                    'lib/vidalia/object.rb',
                    'lib/vidalia/element.rb',
-                   'lib/vidalia/dsl.rb']
+                   'lib/vidalia/dsl.rb',
+                   'lib/vidalia/mysql.rb']
   s.homepage    = 'https://github.com/jrotter/vidalia'
   s.license     = 'MIT'
 end
