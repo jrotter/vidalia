@@ -4,6 +4,7 @@ Gem::Specification.new do |s|
   s.date        = '2018-09-24'
   s.summary     = 'Vidalia'
   s.description = 'Vidalia uses layers to simplify the creation and maintenance of API and database calls in your automated test suite.'
+  s.add_runtime_dependency "mysql2", '~> 0.5.2'
   s.add_development_dependency 'minitest', '~> 0'
   s.authors     = ["Jeremy Rotter"]
   s.email       = 'jeremy.rotter@gmail.com'
