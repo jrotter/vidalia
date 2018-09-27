@@ -2,3 +2,4 @@
 vidalia-*
 .*.swp
 html
+Gemfile.lock
