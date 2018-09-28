@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'vidalia'
-  s.version     = '0.1.2'
+  s.version     = '0.1.3'
   s.date        = '2018-09-27'
   s.summary     = 'Vidalia'
   s.description = 'Vidalia uses layers to simplify the creation and maintenance of API and database calls in your automated test suite.'
