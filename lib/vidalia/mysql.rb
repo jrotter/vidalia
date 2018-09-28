@@ -97,7 +97,7 @@ module Vidalia
     #   db.open_connection
     #
     def open_connection
-      if sslca then
+      if @sslca then
         @db = Mysql2::Client.new(
           host: @host, 
           username: @username, 
