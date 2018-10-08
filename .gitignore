@@ -1,5 +1,7 @@
-# Ignore the following
 vidalia-*
 .*.swp
 html
+.yardoc
+doc
+coverage/*
 Gemfile.lock

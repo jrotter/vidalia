@@ -1,18 +1,17 @@
-require 'minitest/autorun'
 require 'rake/testtask'
-require 'rdoc/task'
+require 'yard'
 
 Rake::TestTask.new do |t|
   t.libs << "test"
-  t.test_files = FileList['test/test*.rb']
+  t.test_files = FileList['test/test_**.rb']
   t.verbose = true
-end
-
-RDoc::Task.new do |rdoc|
-  rdoc.main = "README.rdoc"
-  rdoc.rdoc_files.include("README.rdoc", "FAQ.rdoc", "lib/*","lib/vidalia/*")
+  t.ruby_opts = ['-r "./test/test_helper"']
 end
 
 desc "Run tests"
 task :default => :test
 
+YARD::Rake::YardocTask.new do |t|
+  excluded_files = ['lib/qa-infrastructure/med_data_helper.rb']
+  t.files = Dir['README.rdoc', 'lib/**/*.rb'] - excluded_files
+end
